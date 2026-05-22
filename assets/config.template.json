@@ -1,0 +1,76 @@
+{
+  "_schema_version": 1,
+  "_comment": "Daily Dash config — edit by hand or re-run /daily-dash to update. Tools you don't use stay disabled; Slack channels and Notion DB URL can be appended over time.",
+
+  "user": {
+    "name": "",
+    "name_lower": "",
+    "timezone": "America/Toronto",
+    "_comment": "timezone is an IANA name (e.g. America/Toronto, Europe/London). Default written at setup from `date +%Z`."
+  },
+
+  "vault": {
+    "root": "",
+    "dear_me_path": "",
+    "scan_parent": true,
+    "_comment": "scan_parent = let Claude Code also read sibling folders (notes/, work-items/, etc.) for additional context during refresh."
+  },
+
+  "mode": {
+    "kind": "file",
+    "_comment": "kind: 'file' = open dashboard.html directly (view-only). 'localhost' = run serve-dashboard.py so card-level comments sync back to Claude Code on the next /daily-dash."
+  },
+
+  "tools": {
+    "slack": {
+      "enabled": false,
+      "channels": [],
+      "_comment": "Channels to monitor for mentions and threads where you're awaited. Append channel names like '#growth-pod' as needed."
+    },
+    "calendar": {
+      "enabled": false,
+      "_comment": "Google Calendar via MCP. Pulls today, tomorrow, and rest-of-week events. Deleted events are cleared on each refresh."
+    },
+    "notion": {
+      "enabled": false,
+      "tickets_db_url": "",
+      "scan_notifications": true,
+      "_comment": "tickets_db_url = the URL of your operating-system or work-tracking database. scan_notifications = pull the notification feed for mentions across pages outside your DB."
+    },
+    "gmail": {
+      "enabled": false,
+      "_comment": "Pulls direct threads from the last 24h needing a response. Renders as its own card on Today."
+    },
+    "granola": {
+      "enabled": false,
+      "_comment": "Granola meeting transcripts. Pulled and attached to calendar events as summaries. Use this OR notion_meeting_notes — not both."
+    },
+    "notion_meeting_notes": {
+      "enabled": false,
+      "parent_page_url": "",
+      "_comment": "Alternative to Granola. Point to the Notion parent page where you save meeting notes/summaries."
+    }
+  },
+
+  "q2": {
+    "north_star": "",
+    "_comment": "Optional. One sentence describing your quarter goal. Renders at the top of the Q2 tab. Leave blank for a placeholder."
+  },
+
+  "learning": {
+    "_comment": "Smart-layer toggles. Each learner reads from and writes to dear-me/memory/context.md. Disable any block to revert that surface to static behavior.",
+    "dismissal_deprioritization": true,
+    "channel_relevance_scoring": true,
+    "event_type_autodetect": true,
+    "moment_linking": true,
+    "status_change_flags": true,
+    "confidence_indicators": true,
+    "comment_pattern_learning": true
+  },
+
+  "_meta": {
+    "created_at": "",
+    "last_refreshed_at": "",
+    "skill_version": "1.0.0"
+  }
+}

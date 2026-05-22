@@ -1,0 +1,3744 @@
+<!doctype html>
+<html lang="en" data-palette="parchment" data-type="editorial" data-density="standard">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Alex — Daily Dash (Example)</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Manrope:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  /* TOKENS ---------------------------------------------------- */
+  :root {
+    --bg:#f5eedc; --bg-deep:#ede2c8; --surface:#fdf9ef; --surface-2:#f9f1de;
+    --hairline:#e0d2b3; --hairline-soft:#ecdfc7;
+    --ink:#2a201a; --ink-2:#574531; --ink-muted:#9b8867; --ink-faint:#b8a98a;
+    --terracotta:#b86643; --terracotta-2:#a85633; --terracotta-tint:#f0d9c8;
+    --persimmon:#c98147; --persimmon-tint:#f3dfc6;
+    --mustard:#a98c3a;   --mustard-tint:#ecdfb8;
+    --sage:#7a8c6a;      --sage-tint:#d6dec8;
+    --plum:#8a6b78;      --plum-tint:#e3d3d8;
+    --olive:#8e8a52;     --olive-tint:#e2dcb8;
+    --display:'Fraunces', serif;
+    --sans:'Manrope', system-ui, sans-serif;
+    --mono:'JetBrains Mono', ui-monospace, monospace;
+    --space:24px; --space-sm:14px;
+  }
+  [data-palette="apricot"] {
+    --bg:#f6e6d4;--bg-deep:#ecd5b9;--surface:#fdf5e9;--surface-2:#f5e4cc;
+    --hairline:#e1c9a4;--hairline-soft:#ecd6b4;
+    --ink:#3a261a;--ink-2:#6a4a31;--ink-muted:#a3855e;
+    --terracotta:#c25a3d;--persimmon:#d68a4e;--mustard:#b6963d;--sage:#8aa07a;--plum:#9c7585;
+  }
+  [data-palette="persimmon"] {
+    --bg:#efe1c9;--bg-deep:#e3d0b0;--surface:#fbf3df;--surface-2:#f0e1c2;
+    --hairline:#d6bd92;--hairline-soft:#e3cea6;
+    --ink:#2d1d12;--ink-2:#5e3f25;--ink-muted:#9c7b4d;
+    --terracotta:#b04a25;--persimmon:#c97632;--mustard:#9a7820;--sage:#6e8556;--plum:#875968;
+  }
+  [data-palette="mossbutter"] {
+    --bg:#f4eecf;--bg-deep:#e7df9d;--surface:#fbf6db;--surface-2:#f3edbf;
+    --hairline:#d8c98a;--hairline-soft:#e3d6a4;
+    --ink:#2a2912;--ink-2:#4f4a25;--ink-muted:#8a824f;
+    --terracotta:#b25a37;--persimmon:#c98a3d;--mustard:#9c7a25;--sage:#6e8a4d;--plum:#8c6b7c;
+  }
+  [data-density="airy"]    { --space:32px; --space-sm:20px; }
+  [data-density="compact"] { --space:18px; --space-sm:10px; }
+
+  /* RESET ----------------------------------------------------- */
+  *,*::before,*::after { box-sizing:border-box; }
+  html,body { margin:0; padding:0; background:var(--bg); color:var(--ink); font-family:var(--sans); font-weight:300; line-height:1.55; -webkit-font-smoothing:antialiased; }
+  body {
+    background:
+      radial-gradient(1200px 600px at 100% -100px, var(--bg-deep) 0%, transparent 60%),
+      radial-gradient(800px 500px at -200px 30%, var(--surface-2) 0%, transparent 55%),
+      var(--bg);
+    min-height:100vh;
+  }
+  a { color:inherit; text-decoration:none; }
+  button { background:none; border:0; padding:0; cursor:pointer; font-family:inherit; color:inherit; }
+
+  .page { max-width:1180px; margin:0 auto; padding:32px 56px 80px; }
+  @media (max-width:760px) { .page { padding:24px 22px 60px; } }
+
+  /* HEADER ---------------------------------------------------- */
+  .page-header {
+    display:grid; grid-template-columns:auto 1fr auto; align-items:center;
+    padding-bottom:18px; border-bottom:1px solid var(--hairline);
+    margin-bottom:28px; column-gap:24px;
+  }
+  .page-header__brand { display:flex; align-items:baseline; gap:8px; color:var(--ink-2); }
+  .brand-mark { font-family:var(--display); font-size:28px; font-weight:300; line-height:1; color:var(--terracotta); }
+  .brand-name { font-family:var(--display); font-size:20px; font-weight:400; letter-spacing:0.02em; }
+  .page-header__nav { display:flex; gap:28px; justify-content:flex-start; margin-left:32px; }
+  .page-tab {
+    font-family:var(--display); font-size:15px; font-weight:400;
+    color:var(--ink-muted); padding:6px 0; position:relative;
+  }
+  .page-tab:not(:disabled):hover { color:var(--ink-2); }
+  .page-tab.is-active { color:var(--ink); font-weight:500; }
+  .page-tab.is-active::after {
+    content:''; position:absolute; left:0; right:0; bottom:-19px; height:2px; background:var(--terracotta);
+  }
+  .page-tab:disabled { cursor:default; opacity:0.55; }
+  .page-header__refresh {
+    display:flex; align-items:center; justify-content:flex-end; gap:10px;
+    font-size:11px; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.12em;
+  }
+  .page-header__export {
+    font-family:var(--mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase;
+    padding:5px 10px; border-radius:5px; cursor:pointer;
+    background:var(--surface); color:var(--ink-muted);
+    border:1px solid var(--hairline);
+    transition:all 0.12s ease;
+  }
+  .page-header__export:hover { background:var(--bg-tint); color:var(--ink-2); border-color:var(--ink-muted); }
+  .dot { width:6px; height:6px; border-radius:50%; display:inline-block; }
+  .dot--live { background:var(--sage); animation:pulse 2.4s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:0.35 } }
+
+  /* CTAs (solid) ---------------------------------------------- */
+  .cta {
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:var(--sans); font-size:11.5px; font-weight:500;
+    padding:6px 12px; border-radius:4px; border:1px solid transparent;
+    text-transform:none; letter-spacing:0.02em; line-height:1.2;
+    transition:filter 0.12s, transform 0.06s;
+  }
+  .cta:hover { filter:brightness(1.06); }
+  .cta:active { transform:translateY(1px); }
+  .cta--primary  { background:var(--terracotta); color:#fff8ee; }
+  .cta--obsidian { background:var(--plum);       color:#fbf3df; }
+  .cta--plum     { background:var(--plum);       color:#fbf3df; }
+  .cta--notion   { background:var(--mustard);    color:#fbf3df; }
+  .cta--slack    { background:var(--sage);       color:#fbf3df; }
+  .cta--ghost {
+    background:transparent; border-color:var(--hairline); color:var(--ink-2);
+    text-transform:uppercase; font-size:10.5px; letter-spacing:0.14em;
+  }
+  .cta--ghost:hover { border-color:var(--terracotta); color:var(--terracotta); }
+
+  /* COLLAPSIBLE BLOCK ----------------------------------------- */
+  .m1 { display:flex; flex-direction:column; gap:16px; }
+  .m1-block {
+    border:1px solid var(--hairline); border-radius:8px; overflow:hidden;
+    background:var(--surface);
+  }
+  .m1-block--schedule { background:color-mix(in oklab, var(--persimmon) 7%, var(--surface)); border-color:color-mix(in oklab, var(--persimmon) 22%, var(--hairline)); }
+  .m1-block--queue    { background:color-mix(in oklab, var(--sage) 8%, var(--surface));      border-color:color-mix(in oklab, var(--sage) 22%, var(--hairline)); }
+  .m1-block--follow   { background:color-mix(in oklab, var(--mustard) 8%, var(--surface));   border-color:color-mix(in oklab, var(--mustard) 22%, var(--hairline)); }
+  .m1-block--board    { background:color-mix(in oklab, var(--plum) 7%, var(--surface));      border-color:color-mix(in oklab, var(--plum) 22%, var(--hairline)); }
+  .m1-block__head {
+    width:100%; display:flex; align-items:center; justify-content:space-between; gap:14px;
+    padding:14px 22px; text-align:left; transition:background 0.12s;
+  }
+  .m1-block__head:hover { background:rgba(0,0,0,0.025); }
+  .m1-block.is-open .m1-block__head { border-bottom:1px solid var(--hairline-soft); }
+  .m1-block__head-l { display:flex; align-items:baseline; gap:12px; }
+  .m1-block__head h2 { font-family:var(--display); font-size:18px; font-weight:500; color:var(--ink); margin:0; }
+  .m1-block__count { font-family:var(--mono); font-size:11px; color:var(--ink-muted); padding:2px 8px; background:rgba(255,255,255,0.5); border-radius:999px; }
+  .m1-block__head-r { display:flex; align-items:center; gap:14px; }
+  .m1-block__sub { font-size:10.5px; text-transform:uppercase; letter-spacing:0.14em; color:var(--ink-muted); font-weight:500; }
+  .m1-block__chev { font-family:var(--mono); font-size:18px; color:var(--ink-muted); width:20px; text-align:center; line-height:1; }
+  .m1-block__body { padding:18px 22px 20px; animation:detail-in 0.18s ease-out; }
+  @keyframes detail-in { from { opacity:0; transform:translateY(-3px) } to { opacity:1; transform:none } }
+
+  .m1-toolbar {
+    display:flex; align-items:center; justify-content:space-between;
+    gap:12px; margin-bottom:14px; flex-wrap:wrap;
+  }
+
+  /* PULSE CARD ------------------------------------------------ */
+  .m-pulse {
+    background:var(--surface); border:1px solid var(--hairline);
+    border-radius:8px; overflow:hidden;
+  }
+  .m-pulse__top {
+    display:grid; grid-template-columns:auto 1fr; gap:24px;
+    align-items:center; padding:18px 24px;
+  }
+  .m-pulse__date {
+    border-right:1px solid var(--hairline-soft); padding-right:24px;
+  }
+  .m-pulse__day {
+    font-size:10px; text-transform:uppercase; letter-spacing:0.22em;
+    color:var(--terracotta); font-weight:600; margin-bottom:4px;
+  }
+  .m-pulse__num {
+    font-family:var(--display); font-size:34px; font-weight:300; line-height:1;
+    color:var(--ink); letter-spacing:-0.01em;
+  }
+  .m-pulse__metrics {
+    display:flex; align-items:flex-end; gap:18px; min-width:0; flex-wrap:wrap;
+  }
+  .m-metric {
+    display:flex; flex-direction:column; gap:6px;
+    align-items:flex-start; padding:0;
+  }
+  .m-metric + .m-metric { padding-left:18px; border-left:1px solid var(--hairline-soft); }
+  .m-metric__num {
+    font-family:var(--display); font-size:30px; font-weight:400; line-height:1;
+    color:var(--ink); font-variant-numeric:tabular-nums;
+  }
+  .m-metric--terracotta .m-metric__num { color:var(--terracotta); }
+  .m-metric--persimmon  .m-metric__num { color:var(--persimmon); }
+  .m-metric--plum       .m-metric__num { color:var(--plum); }
+  .m-metric--sage       .m-metric__num { color:var(--sage); }
+  .m-metric--mustard    .m-metric__num { color:var(--mustard); }
+  .m-metric__label {
+    font-size:9.5px; text-transform:uppercase; letter-spacing:0.16em;
+    color:var(--ink-muted); font-weight:500; line-height:1.3;
+  }
+
+  .m-pulse__read {
+    background:color-mix(in oklab, var(--terracotta) 6%, var(--surface));
+    border-top:1px solid color-mix(in oklab, var(--terracotta) 22%, var(--hairline));
+    padding:0;
+  }
+  .m-pulse__read-head {
+    display:flex; align-items:center; justify-content:space-between;
+    width:100%; padding:12px 24px;
+    background:transparent; border:0; cursor:pointer;
+    text-align:left; color:inherit; font:inherit;
+  }
+  .m-pulse__read-head:hover { background:rgba(0,0,0,0.025); }
+  .m-pulse__read-eyebrow {
+    font-size:10px; text-transform:uppercase; letter-spacing:0.22em;
+    color:var(--terracotta); font-weight:600;
+  }
+  .m-pulse__read-chev {
+    font-size:14px; color:var(--terracotta); font-weight:500;
+    transition:transform 0.15s; line-height:1;
+  }
+  .m-pulse__read-chev.is-open { transform:rotate(180deg); }
+  .m-pulse__read-body {
+    padding:2px 24px 16px;
+    font-size:13px; line-height:1.55; color:var(--ink-2);
+    font-weight:300; text-wrap:pretty;
+  }
+  .m-pulse__read-body p { margin:0 0 8px; }
+  .m-pulse__read-list {
+    margin:0; padding:0 0 0 22px;
+    display:flex; flex-direction:column; gap:8px;
+    font-size:13px; line-height:1.55; color:var(--ink-2); font-weight:300;
+  }
+  .m-pulse__read-list li::marker { color:var(--terracotta); font-weight:600; }
+
+  /* SUBTABS --------------------------------------------------- */
+  .m-subtabs {
+    display:inline-flex; gap:2px; background:rgba(0,0,0,0.05);
+    border-radius:6px; padding:3px;
+  }
+  .m-subtab {
+    display:inline-flex; align-items:center; gap:6px;
+    padding:6px 12px; border-radius:4px;
+    font-size:11.5px; font-weight:500; color:var(--ink-muted);
+    transition:all 0.15s;
+  }
+  .m-subtab:hover { color:var(--ink-2); }
+  .m-subtab.is-active { background:var(--surface); color:var(--ink); box-shadow:0 1px 2px rgba(0,0,0,0.04); }
+  .m-subtab__count {
+    font-family:var(--mono); font-size:9.5px; padding:1px 6px;
+    border-radius:999px; background:rgba(0,0,0,0.06); color:var(--ink-muted);
+  }
+  .m-subtab.is-active .m-subtab__count { background:var(--bg-deep); color:var(--ink-2); }
+
+  /* DAY STREAM (mockup3-style) -------------------------------- */
+  .m3-stream { display:flex; flex-direction:column; gap:14px; position:relative; }
+  .m3-stream::before {
+    content:''; position:absolute; left:80px; top:8px; bottom:8px;
+    width:1px; background:var(--hairline-soft);
+  }
+  .m3-bucket { display:grid; grid-template-columns:80px 1fr; gap:16px; align-items:start; }
+  .m3-bucket.is-collapsed .m3-bucket__body { display:none; }
+  .m3-bucket__head {
+    padding-top:8px; position:relative; z-index:1;
+    background:none; border:0; cursor:pointer; text-align:left;
+    display:flex; flex-direction:column; gap:2px;
+  }
+  .m3-bucket__head:hover .m3-bucket__label { filter:brightness(0.9); }
+  .m3-bucket__hint {
+    font-size:9.5px; text-transform:uppercase; letter-spacing:0.14em;
+    color:var(--ink-faint); font-family:var(--mono);
+  }
+  .m3-bucket__head::after {
+    content:''; position:absolute; top:14px; right:-4px;
+    width:9px; height:9px; border-radius:50%;
+    background:var(--ink-faint); border:2px solid var(--surface);
+  }
+  .m3-bucket--persimmon .m3-bucket__head::after { background:var(--persimmon); }
+  .m3-bucket--mustard   .m3-bucket__head::after { background:var(--mustard); }
+  .m3-bucket--plum      .m3-bucket__head::after { background:var(--plum); }
+  .m3-bucket__label {
+    font-family:var(--display); font-size:16px; font-weight:500; line-height:1;
+  }
+  .m3-bucket--persimmon .m3-bucket__label { color:var(--persimmon); }
+  .m3-bucket--mustard   .m3-bucket__label { color:var(--mustard); }
+  .m3-bucket--plum      .m3-bucket__label { color:var(--plum); }
+  .m3-bucket__body {
+    background:rgba(255,255,255,0.55);
+    border:1px solid var(--hairline-soft);
+    border-radius:5px;
+    padding:2px 8px;
+  }
+  .m3-bucket__empty {
+    padding:12px; text-align:center; font-size:11.5px;
+    color:var(--ink-faint); font-style:italic;
+  }
+
+  /* AGENDA / EVENT (inline meta) ------------------------------ */
+  .m-agenda { display:flex; flex-direction:column; gap:0; }
+  .m-event { border-bottom:1px solid var(--hairline-soft); }
+  .m-event:last-child { border-bottom:0; }
+  .m-event__row {
+    width:100%;
+    display:grid; grid-template-columns:64px 4px 1fr 22px;
+    column-gap:12px; padding:11px 6px; align-items:center;
+    text-align:left; border-radius:3px;
+  }
+  .m-event__row:hover { background:rgba(0,0,0,0.025); }
+  .m-event__time { display:flex; flex-direction:column; gap:1px; }
+  .m-event__start {
+    font-family:var(--mono); font-size:11.5px; color:var(--ink);
+    font-weight:500; font-variant-numeric:tabular-nums;
+  }
+  .m-event__dur { font-size:10px; color:var(--ink-faint); font-family:var(--mono); }
+  .m-event__bar { width:3px; align-self:stretch; min-height:32px; background:var(--ink-faint); border-radius:2px; }
+  .m-event--persimmon  .m-event__bar { background:var(--persimmon); }
+  .m-event--terracotta .m-event__bar { background:var(--terracotta); }
+  .m-event--sage       .m-event__bar { background:var(--sage); }
+  .m-event--plum       .m-event__bar { background:var(--plum); }
+  .m-event--mustard    .m-event__bar { background:var(--mustard); }
+  .m-event__line {
+    min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .m-event__title {
+    font-family:var(--display); font-size:14.5px; font-weight:500; color:var(--ink);
+  }
+  .m-event__inline-meta { font-family:var(--sans); font-size:12px; color:var(--ink-muted); font-weight:300; }
+  .m-event__chev { color:var(--ink-faint); font-family:var(--mono); font-size:16px; text-align:center; }
+  .m-event.is-open .m-event__chev { color:var(--terracotta); }
+  .m-event.is-open .m-event__row { background:rgba(0,0,0,0.03); }
+  .m-event__detail {
+    padding:12px 16px 16px 84px;
+    background:rgba(255,255,255,0.5);
+    border-left:2px solid var(--terracotta);
+    margin:0 6px 8px; border-radius:0 4px 4px 0;
+    animation:detail-in 0.18s ease-out;
+  }
+  .m-event__summary { margin:0 0 12px; font-size:12.5px; line-height:1.55; color:var(--ink-2); font-weight:300; }
+  .m-event__notes {
+    padding:10px 12px; background:var(--surface);
+    border:1px solid var(--hairline-soft); border-radius:3px; margin-bottom:12px;
+  }
+  .m-event__notes-h {
+    font-size:9.5px; text-transform:uppercase; letter-spacing:0.18em;
+    color:var(--terracotta); font-weight:600; margin-bottom:4px;
+  }
+  .m-event__notes p { margin:0; font-size:12.5px; line-height:1.5; color:var(--ink-2); font-weight:300; }
+  .m-event__actions { display:flex; gap:6px; flex-wrap:wrap; }
+
+  /* QUEUE LIST ------------------------------------------------ */
+  .m-queuelist { display:flex; flex-direction:column; gap:6px; }
+  .dlist { display:flex; flex-direction:column; gap:6px; }
+  .dlist__row.is-dragging { opacity:0.4; }
+  .dlist__row.is-over .m-card { border-top:2px solid var(--terracotta); }
+
+  .m-card {
+    background:rgba(255,255,255,0.55);
+    border:1px solid var(--hairline-soft); border-radius:5px;
+    transition:background 0.12s;
+    overflow:hidden;
+  }
+  .m-card:hover { background:rgba(255,255,255,0.85); }
+  .m-card.is-done { opacity:0.45; }
+  .m-card.is-done .m-card__title { text-decoration:line-through; }
+  .m-card__head {
+    display:grid; grid-template-columns:24px 70px 1fr auto auto;
+    column-gap:14px; align-items:center;
+    padding:14px 16px;
+    cursor:pointer; width:100%; background:transparent;
+    border:0; text-align:left; color:inherit; font:inherit;
+  }
+  .m-card__head:hover { background:rgba(0,0,0,0.02); }
+  .m-card__chev {
+    font-size:14px; color:var(--ink-muted); font-weight:500;
+    line-height:1; padding-left:6px;
+    transition:transform 0.15s;
+  }
+  .m-card.is-open .m-card__chev { transform:rotate(180deg); color:var(--ink-2); }
+  .m-card__detail {
+    padding:0 16px 14px 108px;
+    border-top:1px solid var(--hairline-soft);
+    padding-top:12px; margin-top:0;
+  }
+  .m-card__detail .m-card__eyebrow { margin-bottom:6px; }
+  .m-card__detail .m-card__sub { margin-bottom:0; }
+  .m-card__detail .m-card__links { margin-top:10px; }
+
+  .m-check {
+    width:18px; height:18px; border:1px solid var(--hairline);
+    border-radius:50%; display:inline-flex; align-items:center; justify-content:center;
+    color:transparent; transition:all 0.15s; margin-top:2px;
+    position:relative; z-index:2; cursor:pointer;
+    background:transparent;
+  }
+  .m-check:hover { border-color:var(--terracotta); }
+  .m-check.is-done { background:var(--terracotta); border-color:var(--terracotta); color:#fff; }
+
+  .m-card__when {
+    font-family:var(--mono); font-size:11px; color:var(--ink-muted);
+    font-variant-numeric:tabular-nums;
+  }
+  .m-card__when-main { color:var(--ink-2); }
+  .m-card__when-sub { color:var(--ink-faint); margin-top:2px; font-size:10px; }
+  .m-card--overdue .m-card__when-main { color:var(--terracotta); font-weight:500; }
+  .m-card--today .m-card__when-main { color:var(--persimmon); }
+
+  .m-card__body { min-width:0; }
+  .m-card__eyebrow { font-size:10px; text-transform:uppercase; letter-spacing:0.14em; color:var(--ink-muted); margin-bottom:4px; font-weight:500; }
+  .m-card__title { font-family:var(--display); font-size:15px; font-weight:500; line-height:1.3; color:var(--ink); margin-bottom:4px; }
+  .m-card__sub { font-size:12.5px; color:var(--ink-2); line-height:1.5; font-weight:300; text-wrap:pretty; }
+  .m-card__links { display:flex; flex-wrap:wrap; gap:5px; margin-top:8px; }
+  .m-card__meta { display:flex; flex-direction:column; align-items:flex-end; gap:4px; }
+  .m-card__badges { display:flex; flex-wrap:wrap; gap:4px; justify-content:flex-end; max-width:180px; }
+
+  /* FOLLOWUPS ------------------------------------------------- */
+  /* The .m-follow row variant was removed when the xrow-based FollowupRow took over.
+     Keeping: .m-followlist (Today wrapper) + .m-follow__badges (Personal page SendSight steps). */
+  .m-followlist { display:flex; flex-direction:column; gap:6px; }
+  .m-follow__badges { display:flex; gap:4px; flex-wrap:wrap; justify-content:flex-end; }
+
+  /* BADGES ---------------------------------------------------- */
+  .badge {
+    display:inline-flex; align-items:center;
+    font-size:9.5px; font-weight:500; text-transform:uppercase; letter-spacing:0.14em;
+    padding:3px 9px; border-radius:999px; white-space:nowrap; line-height:1.4;
+  }
+  .badge--terracotta { background:var(--terracotta-tint); color:var(--terracotta-2); }
+  .badge--persimmon  { background:var(--persimmon-tint);  color:var(--persimmon); }
+  .badge--mustard    { background:var(--mustard-tint);    color:var(--mustard); }
+  .badge--sage       { background:var(--sage-tint);       color:var(--sage); }
+  .badge--plum       { background:var(--plum-tint);       color:var(--plum); }
+  .badge--olive      { background:var(--olive-tint);      color:var(--olive); }
+  .badge--overdue    { background:var(--terracotta);      color:#fff8ee; }
+
+  /* KANBAN ---------------------------------------------------- */
+  .m-kanban-toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; flex-wrap:wrap; }
+  .m-kanban-toolbar__hidden { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+  .m-kanban-toolbar__hidden-h { font-size:10px; text-transform:uppercase; letter-spacing:0.14em; color:var(--ink-muted); }
+  .m-kanban-scroll {
+    overflow-x:auto; padding-bottom:8px;
+    scrollbar-width:thin;
+  }
+  .m-kanban-scroll::-webkit-scrollbar { height:8px; }
+  .m-kanban-scroll::-webkit-scrollbar-thumb { background:var(--hairline); border-radius:4px; }
+  .m-kanban {
+    display:flex; gap:10px; min-width:min-content;
+  }
+  .m-kcol {
+    flex:0 0 calc((100% - 30px) / 4); min-width:200px; max-width:1fr;
+    padding:10px 10px 12px;
+    background:rgba(255,255,255,0.5);
+    border:1px solid var(--hairline-soft);
+    border-radius:6px;
+    min-height:120px;
+    transition:background 0.12s, border-color 0.12s;
+  }
+  .m-kcol--olive    { border-top:3px solid var(--olive); }
+  .m-kcol--mustard  { border-top:3px solid var(--mustard); }
+  .m-kcol--persimmon{ border-top:3px solid var(--persimmon); }
+  .m-kcol--plum     { border-top:3px solid var(--plum); }
+  .m-kcol--sage     { border-top:3px solid var(--sage); }
+  .m-kcol--terracotta { border-top:3px solid var(--terracotta); }
+  .m-kcol__hide { font-family:var(--mono); font-size:11px; color:var(--ink-faint); padding:0 4px; line-height:1; }
+  .m-kcol__hide:hover { color:var(--terracotta); }
+  .m-kcol-restore {
+    display:inline-flex; align-items:center; gap:6px;
+    padding:5px 10px; border:1px dashed var(--hairline); border-radius:4px;
+    font-size:10.5px; text-transform:uppercase; letter-spacing:0.12em; color:var(--ink-muted);
+  }
+  .m-kcol-restore:hover { color:var(--terracotta); border-color:var(--terracotta); }
+  .m-kcol.is-drop {
+    background:color-mix(in oklab, var(--terracotta) 7%, var(--surface));
+    border-color:var(--terracotta);
+  }
+  .m-kcol__head {
+    display:flex; align-items:baseline; justify-content:space-between;
+    padding:4px 4px 10px; border-bottom:1px solid var(--hairline-soft); margin-bottom:8px;
+  }
+  .m-kcol__label { font-family:var(--display); font-size:13px; font-weight:500; color:var(--ink); }
+  .m-kcol__count { font-family:var(--mono); font-size:10px; color:var(--ink-muted); }
+  .m-kcol__body { display:flex; flex-direction:column; gap:6px; }
+  .m-kcol__empty { padding:12px 6px; font-size:11px; color:var(--ink-faint); text-align:center; font-style:italic; }
+  .m-kcol__more {
+    margin-top:6px; padding:6px 8px; font-size:10.5px; text-transform:uppercase;
+    letter-spacing:0.14em; color:var(--ink-muted); border:1px dashed var(--hairline);
+    border-radius:4px; text-align:center;
+  }
+  .m-kcol__more:hover { color:var(--terracotta); border-color:var(--terracotta); }
+
+  .m-kcard {
+    background:var(--surface); border:1px solid var(--hairline-soft); border-radius:5px;
+    overflow:hidden; transition:box-shadow 0.12s, transform 0.06s;
+  }
+  .m-kcard--overdue {
+    background:color-mix(in oklab, var(--terracotta) 14%, var(--surface));
+    border-color:color-mix(in oklab, var(--terracotta) 38%, var(--hairline));
+  }
+  .m-kcard--today {
+    background:color-mix(in oklab, var(--mustard) 18%, var(--surface));
+    border-color:color-mix(in oklab, var(--mustard) 40%, var(--hairline));
+  }
+  .m-kcard:hover { box-shadow:0 2px 8px -4px rgba(0,0,0,0.18); }
+  .m-kcard.is-dragging { opacity:0.5; transform:scale(0.98); }
+  .m-kcard__head {
+    width:100%; display:grid; grid-template-columns:14px 1fr 16px;
+    column-gap:6px; align-items:center;
+    padding:9px 10px; text-align:left; cursor:grab;
+  }
+  .m-kcard__head:active { cursor:grabbing; }
+  .m-kcard__grip {
+    color:var(--ink-faint); font-size:10px; line-height:1;
+    letter-spacing:-2px; user-select:none;
+  }
+  .m-kcard__title {
+    font-family:var(--display); font-size:13px; font-weight:500;
+    color:var(--ink); line-height:1.3; text-wrap:pretty;
+  }
+  .m-kcard__chev {
+    font-family:var(--mono); font-size:14px; color:var(--ink-faint); text-align:center;
+  }
+  .m-kcard.is-open .m-kcard__chev { color:var(--terracotta); }
+  .m-kcard__detail {
+    padding:8px 12px 12px; border-top:1px solid var(--hairline-soft);
+    background:color-mix(in oklab, var(--surface-2) 50%, var(--surface));
+    animation:detail-in 0.18s ease-out;
+  }
+  .m-kcard__eyebrow { font-size:9.5px; text-transform:uppercase; letter-spacing:0.14em; color:var(--ink-muted); margin-bottom:4px; font-weight:500; }
+  .m-kcard__sub { margin:0 0 8px; font-size:12px; line-height:1.5; color:var(--ink-2); font-weight:300; }
+  .m-kcard__read {
+    background:color-mix(in oklab, var(--terracotta) 8%, var(--surface));
+    border-left:2px solid var(--terracotta);
+    padding:8px 10px; border-radius:0 4px 4px 0; margin-bottom:10px;
+  }
+  .m-kcard__read-h {
+    font-size:9.5px; text-transform:uppercase; letter-spacing:0.18em;
+    color:var(--terracotta); font-weight:600; margin-bottom:3px; display:block;
+  }
+  .m-kcard__read p { margin:0; font-size:12px; line-height:1.5; color:var(--ink-2); font-weight:300; }
+  .m-kcard__links { display:flex; gap:5px; flex-wrap:wrap; }
+
+  /* CARD NOTE — toggleable per-card note picked up on the next /daily-dash refresh */
+  .m-cardnote { margin-top:10px; }
+  .m-cardnote__toggle {
+    background:none; border:1px dashed var(--hairline);
+    color:var(--ink-muted); font-size:11px; font-weight:500;
+    padding:5px 10px; border-radius:4px; cursor:pointer;
+    display:inline-flex; align-items:center; gap:5px;
+    transition:all 0.15s;
+  }
+  .m-cardnote__toggle:hover { border-color:var(--plum); color:var(--plum); }
+  .m-cardnote__toggle.has-note { border-style:solid; border-color:var(--plum); color:var(--plum); background:color-mix(in oklab, var(--plum) 6%, var(--surface)); }
+  .m-cardnote__dot { width:6px; height:6px; border-radius:50%; background:var(--plum); display:inline-block; }
+  .m-cardnote__wrap {
+    margin-top:8px; background:color-mix(in oklab, var(--plum) 6%, var(--surface));
+    border-left:2px solid var(--plum); border-radius:0 4px 4px 0;
+    padding:8px 10px;
+  }
+  .m-cardnote__label {
+    font-size:9.5px; text-transform:uppercase; letter-spacing:0.18em;
+    color:var(--plum); font-weight:600; margin-bottom:5px; display:block;
+  }
+  .m-cardnote__ta {
+    width:100%; min-height:54px; padding:6px 8px; border-radius:3px;
+    border:1px solid var(--hairline); background:var(--surface);
+    font-family:var(--sans); font-size:12px; line-height:1.45; color:var(--ink);
+    resize:vertical; box-sizing:border-box;
+  }
+  .m-cardnote__ta:focus { outline:none; border-color:var(--plum); }
+  .m-cardnote__meta {
+    display:flex; justify-content:space-between; align-items:center;
+    margin-top:5px; font-size:10px; color:var(--ink-muted);
+  }
+  .m-cardnote__clear {
+    background:none; border:none; color:var(--ink-muted); font-size:10px;
+    cursor:pointer; padding:0; text-decoration:underline;
+  }
+  .m-cardnote__clear:hover { color:var(--terracotta); }
+
+  /* VIEW MORE / EMPTY ----------------------------------------- */
+  .m-empty {
+    padding:30px 18px; text-align:center; color:var(--ink-faint);
+    font-size:13px; font-style:italic;
+    border:1px dashed var(--hairline-soft); border-radius:5px;
+  }
+  .m-viewmore { margin-top:10px; }
+
+  /* RESPONSIVE ------------------------------------------------ */
+  @media (max-width:1100px) {
+    .m-kcol { flex:0 0 calc((100% - 20px) / 3); }
+  }
+  @media (max-width:900px) {
+    .m-kcol { flex:0 0 calc((100% - 10px) / 2); }
+    .m-pulse__top { grid-template-columns:1fr; }
+    .m-pulse__date { border-right:0; padding-right:0; border-bottom:1px solid var(--hairline-soft); padding-bottom:14px; }
+    .m-event__row { grid-template-columns:54px 4px 1fr 20px; }
+    .m-event__detail { padding-left:16px; }
+    .page-header { grid-template-columns:1fr 1fr; row-gap:10px; }
+    .page-header__nav { grid-column:1/-1; justify-content:flex-start; flex-wrap:wrap; }
+  }
+  @media (max-width:640px) {
+    .m-metric { padding:0 8px; }
+    .m-metric__num { font-size:22px; }
+    .m-card__head { grid-template-columns:24px 1fr auto auto; row-gap:8px; }
+    .m-card__head .m-card__when, .m-card__head .m-card__meta { display:none; }
+    .m-card__detail { padding-left:38px; }
+    .m-follow__badges { display:none; }
+    .m-kcol { flex:0 0 85%; }
+  }
+</style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<!-- ===== inlined: data.js ===== -->
+<script>
+// Daily Dash — data
+// Each card: { id, when, title, sub, badges:[{kind,label}], links:[{kind,label,href}], read?, drafts?, checklist? }
+// Cards live in flat arrays keyed by section id. Order is preserved by drag/reorder + persisted in localStorage.
+
+// EXAMPLE / PREVIEW MODE — this file is a static snapshot using sample
+// "Acme Inc" data. It mirrors what a real refresh produces. Gmail and
+// Granola are intentionally left disconnected so you can see both
+// connected and "Connect <Tool>" empty-states in one view.
+window.DAILY_DASH_CONFIG = {
+  user: { name: 'Alex', timezone: 'America/Toronto' },
+  tools: {
+    slack:    { enabled: true  },
+    calendar: { enabled: true  },
+    notion:   { enabled: true  },
+    gmail:    { enabled: false },
+    granola:  { enabled: false },
+    notion_meeting_notes: { enabled: false },
+  },
+};
+
+window.DAILY_DASH_DATA = {
+  meta: {
+    refreshedAt: '2026-05-22T09:14:00-04:00',
+    today: 'Friday, May 22',
+    todayLong: 'Friday May 22 — 2026',
+    todayShort: 'May 22',
+    weekRange: 'May 18 – 22',
+    weekRangeSub: 'Q2 push — onboarding flow ships Thursday.',
+    weekStart: '2026-05-18',
+    weekEnd: '2026-05-22',
+    todayFollowupIds: ['fu-acme-1','fu-acme-3'],
+    weekDays: [
+      { key:'mon', name:'Mon', num:'18' },
+      { key:'tue', name:'Tue', num:'19' },
+      { key:'wed', name:'Wed', num:'20' },
+      { key:'thu', name:'Thu', num:'21' },
+      { key:'fri', name:'Fri', num:'22' },
+    ],
+    dashRead: {
+      headline: "Three things move today.",
+      items: [
+        "Finalize the onboarding email v2 copy before 2pm — Sam is waiting on it.",
+        "Reply to Priya's #growth-pod thread about activation milestone — she's blocked.",
+        "Skim the Q2 retention deck draft and flag anything off before Monday review.",
+      ],
+    },
+    weather: [
+      { num:'3', label:'Needs you',      tone:'persimmon',  confidence:'high' },
+      { num:'1', label:'Overdue',        tone:'terracotta', confidence:'high' },
+      { num:'2', label:'Drafts pending', tone:'plum',       confidence:'high' },
+      { num:'4', label:'Calendar today', tone:'sage',       confidence:'high' },
+    ],
+  },
+
+  selfAudit: {
+    headline: "Vault is healthy — 2 stale notes flagged.",
+    items: [
+      "notes/projects/onboarding-rebuild.md — last touched 12 days ago. Status snapshot stale.",
+      "notes/people/priya-shah.md — 1:1 notes missing for last two meetings.",
+    ],
+  },
+
+  meetingPrepSuggestions: [
+    { id:'mp-1', when:'10:30 AM', title:'Sam (1:1)', sub:'You have not opened the prep doc yet.',
+      links:[{ kind:'doc', label:'Open prep', href:'#' }] },
+    { id:'mp-2', when:'2:00 PM',  title:'Growth pod weekly', sub:'Last week\'s notes have 3 open follow-ups.',
+      links:[{ kind:'doc', label:'Last week\'s notes', href:'#' }] },
+  ],
+
+  today_calendar: [
+    { id:'cal-1', when:'9:30 AM',  title:'Focus block — onboarding copy', sub:'90 min', kind:'focus',
+      badges:[{ kind:'tone', label:'focus' }] },
+    { id:'cal-2', when:'10:30 AM', title:'Sam (1:1)', sub:'30 min · weekly', kind:'1on1',
+      badges:[{ kind:'tone', label:'1:1' }],
+      links:[{ kind:'doc', label:'Prep doc', href:'#' }] },
+    { id:'cal-3', when:'1:00 PM',  title:'Vendor sync — Iterable', sub:'45 min · 2 external attendees', kind:'external',
+      badges:[{ kind:'tone', label:'external' }] },
+    { id:'cal-4', when:'2:00 PM',  title:'Growth pod weekly', sub:'60 min · 6 attendees', kind:'team',
+      badges:[{ kind:'tone', label:'team' }],
+      links:[{ kind:'doc', label:'Agenda', href:'#' }] },
+  ],
+
+  tomorrow_calendar: [],
+  restweek_calendar: [
+    { id:'cal-5', when:'Mon 11:00 AM', title:'Q2 retention review', sub:'Leadership read-out', kind:'team' },
+    { id:'cal-6', when:'Tue 3:00 PM',  title:'Priya (1:1)', sub:'30 min · weekly', kind:'1on1' },
+  ],
+
+  today_hero: [
+    { id:'hero-1', when:'Today', title:'Finalize onboarding email v2 copy', sub:'Sam is blocked until you ship this.',
+      badges:[{ kind:'pri', label:'P0' }],
+      links:[{ kind:'doc', label:'Draft', href:'#' }, { kind:'slack', label:'Sam thread', href:'#' }],
+      checklist:[
+        { id:'c1', label:'Subject line A/B picked', done:true },
+        { id:'c2', label:'Body copy reviewed', done:false },
+        { id:'c3', label:'CTA URL confirmed', done:false },
+      ] },
+    { id:'hero-2', when:'Today', title:'Reply to Priya re: activation milestone',
+      sub:'Slack thread in #growth-pod since Wednesday.',
+      badges:[{ kind:'pri', label:'P1' }],
+      links:[{ kind:'slack', label:'Open thread', href:'#' }] },
+    { id:'hero-3', when:'Today', title:'Skim Q2 retention deck',
+      sub:'Read-out is Monday. Flag anything off.',
+      links:[{ kind:'doc', label:'Deck draft', href:'#' }] },
+  ],
+
+  overdue: [
+    { id:'od-1', when:'2 days late', title:'Approve vendor SOW — Iterable renewal',
+      sub:'Procurement chased twice. Cannot proceed without your sign-off.',
+      badges:[{ kind:'pri', label:'P0' }],
+      links:[{ kind:'doc', label:'SOW', href:'#' }] },
+  ],
+
+  slack: [
+    { id:'sl-1', when:'8:42 AM', title:'Priya in #growth-pod', sub:'"Alex — quick gut check on the activation milestone definition before I ship the dashboard?"',
+      kind:'mention', confidence:'high',
+      badges:[{ kind:'channel', label:'#growth-pod' }],
+      links:[{ kind:'slack', label:'Open thread', href:'#' }] },
+    { id:'sl-2', when:'Yesterday 4:18 PM', title:'Sam DM', sub:'"copy looks 90% there, two nits in the thread"',
+      kind:'dm', confidence:'high',
+      links:[{ kind:'slack', label:'Open DM', href:'#' }] },
+    { id:'sl-3', when:'Yesterday 11:02 AM', title:'Jamie in #acme-marketing', sub:'"is the retention deck ready to share to leadership monday?"',
+      kind:'mention', confidence:'high',
+      badges:[{ kind:'channel', label:'#acme-marketing' }] },
+    { id:'sl-4', when:'2 days ago', title:'Notion mention: Q2 retention review',
+      sub:'Tagged by Morgan on the planning doc.',
+      kind:'notion-mention', confidence:'med',
+      links:[{ kind:'notion', label:'Open page', href:'#' }] },
+  ],
+
+  shipped: [
+    { id:'sh-1', when:'Wed', title:'Onboarding email v1 sent', sub:'42% open, 8% CTR. Cohort: new signups since May 15.',
+      badges:[{ kind:'win', label:'shipped' }] },
+    { id:'sh-2', when:'Mon', title:'Activation milestone dashboard v0', sub:'Priya owns. Internal review only.',
+      badges:[{ kind:'win', label:'shipped' }] },
+  ],
+
+  launches: [
+    { id:'lc-1', when:'Thu May 28', title:'Onboarding flow v2 — full launch',
+      sub:'Email + in-app + welcome modal. Targeting 100% of new signups.',
+      badges:[{ kind:'pri', label:'P0' }] },
+  ],
+
+  watching_p0: [
+    { id:'wp-1', when:'Ongoing', title:'Trial-to-paid conversion rate',
+      sub:'Down 1.4pp WoW. Investigating attribution before raising.',
+      links:[{ kind:'doc', label:'Funnel dashboard', href:'#' }] },
+  ],
+
+  followups: [
+    { id:'fu-acme-1', when:'Today', title:'Send Sam the final copy',
+      sub:'Promised by EOD Friday.',
+      links:[{ kind:'slack', label:'Sam thread', href:'#' }] },
+    { id:'fu-acme-2', when:'Mon May 25', title:'Loop back with Jamie on retention deck',
+      sub:'After leadership review.' },
+    { id:'fu-acme-3', when:'Today', title:'Confirm Iterable renewal SOW',
+      sub:'Procurement is waiting.' },
+  ],
+
+  lifecycle_board: [
+    { id:'lb-1', col:'planning',    title:'Reactivation email series',  sub:'Dormant >30d cohort.' },
+    { id:'lb-2', col:'in-progress', title:'Onboarding flow v2',          sub:'Ships Thursday.',
+      statusChange:{ prev:'planning', now:'in-progress' } },
+    { id:'lb-3', col:'in-progress', title:'Activation milestone dashboard', sub:'Priya owns.' },
+    { id:'lb-4', col:'shipped',     title:'Onboarding email v1',         sub:'Shipped Wed.' },
+    { id:'lb-5', col:'blocked',     title:'Cross-sell email — Acme Pro', sub:'Waiting on legal review of claims.' },
+  ],
+
+  lifecycle_os_mirror: {
+    in_progress: 2,
+    planning: 1,
+    shipped: 1,
+    blocked: 1,
+  },
+
+  planning: [
+    { id:'pl-1', when:'Next sprint', title:'Reactivation email series',
+      sub:'Hypothesis: a 3-email sequence at day 7/14/30 recovers ~6% of dormants.',
+      links:[{ kind:'doc', label:'Brief', href:'#' }] },
+    { id:'pl-2', when:'Q2 stretch', title:'Cross-sell — Acme Pro tier',
+      sub:'Blocked on legal review of comparison claims.',
+      badges:[{ kind:'pri', label:'blocked' }] },
+  ],
+
+  q2: {
+    summary: 'Lift trial-to-paid conversion by 10% via a tighter onboarding flow.',
+    glance: { in_flight: 2, planning: 1, shipped: 2, blocked: 1 },
+    wins: [
+      { id:'w1', title:'Onboarding email v1 — 42% open',     sub:'2x baseline open rate.' },
+      { id:'w2', title:'Activation milestone defined + shipped to dashboard', sub:'Cross-team agreement reached in two meetings.' },
+    ],
+    beliefs: [
+      { id:'b1', title:'Day-1 activation is the lever.', sub:'Strongest predictor of week-4 retention in the Q1 cohort analysis.' },
+      { id:'b2', title:'Email + in-app together beat either alone.', sub:'Q1 A/B showed combined cohort up 18% on activation rate.' },
+    ],
+  },
+
+  personal: {
+    note: 'Walk after the 2pm meeting. Big push next week — protect Sunday.',
+  },
+};
+
+</script>
+
+<!-- ===== inlined: tweaks-panel.jsx ===== -->
+<script type="text/babel">
+
+// tweaks-panel.jsx
+// Reusable Tweaks shell + form-control helpers.
+//
+// Owns the host protocol (listens for __activate_edit_mode / __deactivate_edit_mode,
+// posts __edit_mode_available / __edit_mode_set_keys / __edit_mode_dismissed) so
+// individual prototypes don't re-roll it. Ships a consistent set of controls so you
+// don't hand-draw <input type="range">, segmented radios, steppers, etc.
+//
+// Usage (in an HTML file that loads React + Babel):
+//
+//   const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+//     "primaryColor": "#D97757",
+//     "palette": ["#D97757", "#29261b", "#f6f4ef"],
+//     "fontSize": 16,
+//     "density": "regular",
+//     "dark": false
+//   }/*EDITMODE-END*/;
+//
+//   function App() {
+//     const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+//     return (
+//       <div style={{ fontSize: t.fontSize, color: t.primaryColor }}>
+//         Hello
+//         <TweaksPanel>
+//           <TweakSection label="Typography" />
+//           <TweakSlider label="Font size" value={t.fontSize} min={10} max={32} unit="px"
+//                        onChange={(v) => setTweak('fontSize', v)} />
+//           <TweakRadio  label="Density" value={t.density}
+//                        options={['compact', 'regular', 'comfy']}
+//                        onChange={(v) => setTweak('density', v)} />
+//           <TweakSection label="Theme" />
+//           <TweakColor  label="Primary" value={t.primaryColor}
+//                        options={['#D97757', '#2A6FDB', '#1F8A5B', '#7A5AE0']}
+//                        onChange={(v) => setTweak('primaryColor', v)} />
+//           <TweakColor  label="Palette" value={t.palette}
+//                        options={[['#D97757', '#29261b', '#f6f4ef'],
+//                                  ['#475569', '#0f172a', '#f1f5f9']]}
+//                        onChange={(v) => setTweak('palette', v)} />
+//           <TweakToggle label="Dark mode" value={t.dark}
+//                        onChange={(v) => setTweak('dark', v)} />
+//         </TweaksPanel>
+//       </div>
+//     );
+//   }
+//
+// ─────────────────────────────────────────────────────────────────────────────
+
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    transform:scale(var(--dc-inv-zoom,1));transform-origin:bottom right;
+    background:rgba(250,249,247,.78);color:#29261b;
+    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;
+    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
+  .twk-body::-webkit-scrollbar{width:8px}
+  .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
+  .twk-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:4px;
+    border:2px solid transparent;background-clip:content-box}
+  .twk-body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.25);
+    border:2px solid transparent;background-clip:content-box}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
+    color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+
+  .twk-field{appearance:none;width:100%;height:26px;padding:0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
+    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
+  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
+  select.twk-field{padding-right:22px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
+    background-repeat:no-repeat;background-position:right 8px center}
+
+  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
+    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
+  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
+    width:14px;height:14px;border-radius:50%;background:#fff;
+    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
+    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
+    background:rgba(0,0,0,.06);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg.dragging .twk-seg-thumb{transition:none}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+    background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
+    border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2;
+    overflow-wrap:anywhere}
+
+  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
+    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+
+  .twk-num{display:flex;align-items:center;height:26px;padding:0 0 0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;background:rgba(255,255,255,.6)}
+  .twk-num-lbl{font-weight:500;color:rgba(41,38,27,.6);cursor:ew-resize;
+    user-select:none;padding-right:8px}
+  .twk-num input{flex:1;min-width:0;height:100%;border:0;background:transparent;
+    font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px 0 0;
+    outline:none;color:inherit;-moz-appearance:textfield}
+  .twk-num input::-webkit-inner-spin-button,.twk-num input::-webkit-outer-spin-button{
+    -webkit-appearance:none;margin:0}
+  .twk-num-unit{padding-right:8px;color:rgba(41,38,27,.45)}
+
+  .twk-btn{appearance:none;height:26px;padding:0 12px;border:0;border-radius:7px;
+    background:rgba(0,0,0,.78);color:#fff;font:inherit;font-weight:500;cursor:default}
+  .twk-btn:hover{background:rgba(0,0,0,.88)}
+  .twk-btn.secondary{background:rgba(0,0,0,.06);color:inherit}
+  .twk-btn.secondary:hover{background:rgba(0,0,0,.1)}
+
+  .twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;
+    background:transparent;flex-shrink:0}
+  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
+  .twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
+  .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
+
+  .twk-chips{display:flex;gap:6px}
+  .twk-chip{position:relative;appearance:none;flex:1;min-width:0;height:46px;
+    padding:0;border:0;border-radius:6px;overflow:hidden;cursor:default;
+    box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.06);
+    transition:transform .12s cubic-bezier(.3,.7,.4,1),box-shadow .12s}
+  .twk-chip:hover{transform:translateY(-1px);
+    box-shadow:0 0 0 .5px rgba(0,0,0,.18),0 4px 10px rgba(0,0,0,.12)}
+  .twk-chip[data-on="1"]{box-shadow:0 0 0 1.5px rgba(0,0,0,.85),
+    0 2px 6px rgba(0,0,0,.15)}
+  .twk-chip>span{position:absolute;top:0;bottom:0;right:0;width:34%;
+    display:flex;flex-direction:column;box-shadow:-1px 0 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i{flex:1;box-shadow:0 -1px 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i:first-child{box-shadow:none}
+  .twk-chip svg{position:absolute;top:6px;left:6px;width:13px;height:13px;
+    filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+`;
+
+// ── useTweaks ───────────────────────────────────────────────────────────────
+// Single source of truth for tweak values. setTweak persists via the host
+// (__edit_mode_set_keys → host rewrites the EDITMODE block on disk).
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  // Accepts either setTweak('key', value) or setTweak({ key: value, ... }) so a
+  // useState-style call doesn't write a "[object Object]" key into the persisted
+  // JSON block.
+  const setTweak = React.useCallback((keyOrEdits, val) => {
+    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
+      ? keyOrEdits : { [keyOrEdits]: val };
+    setValues((prev) => ({ ...prev, ...edits }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+    // Same-window signal so in-page listeners (deck-stage rail thumbnails)
+    // can react — the parent message only reaches the host, not peers.
+    window.dispatchEvent(new CustomEvent('tweakchange', { detail: edits }));
+  }, []);
+  return [values, setTweak];
+}
+
+// ── TweaksPanel ─────────────────────────────────────────────────────────────
+// Floating shell. Registers the protocol listener BEFORE announcing
+// availability — if the announce ran first, the host's activate could land
+// before our handler exists and the toolbar toggle would silently no-op.
+// The close button posts __edit_mode_dismissed so the host's toolbar toggle
+// flips off in lockstep; the host echoes __deactivate_edit_mode back which
+// is what actually hides the panel.
+function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children }) {
+  const [open, setOpen] = React.useState(false);
+  const dragRef = React.useRef(null);
+  // Auto-inject a rail toggle when a <deck-stage> is on the page. The
+  // toggle drives the deck's per-viewer _railVisible via window message;
+  // state is mirrored from the same localStorage key the deck reads so
+  // the control reflects reality across reloads. The mechanism is the
+  // message — authors who want custom placement can post it directly
+  // and pass noDeckControls to suppress this one.
+  const hasDeckStage = React.useMemo(
+    () => typeof document !== 'undefined' && !!document.querySelector('deck-stage'),
+    [],
+  );
+  // Hide the toggle until the host has actually enabled the rail (the
+  // __omelette_rail_enabled window message, posted only when the
+  // omelette_deck_rail_enabled flag is on for this user). The initial read
+  // covers TweaksPanel mounting after the message already arrived; the
+  // listener covers the common case of mounting first.
+  const [railEnabled, setRailEnabled] = React.useState(
+    () => hasDeckStage && !!document.querySelector('deck-stage')?._railEnabled,
+  );
+  React.useEffect(() => {
+    if (!hasDeckStage || railEnabled) return undefined;
+    const onMsg = (e) => {
+      if (e.data && e.data.type === '__omelette_rail_enabled') setRailEnabled(true);
+    };
+    window.addEventListener('message', onMsg);
+    return () => window.removeEventListener('message', onMsg);
+  }, [hasDeckStage, railEnabled]);
+  const [railVisible, setRailVisible] = React.useState(() => {
+    try { return localStorage.getItem('deck-stage.railVisible') !== '0'; } catch (e) { return true; }
+  });
+  const toggleRail = (on) => {
+    setRailVisible(on);
+    window.postMessage({ type: '__deck_rail_visible', on }, '*');
+  };
+  const offsetRef = React.useRef({ x: 16, y: 16 });
+  const PAD = 16;
+
+  const clampToViewport = React.useCallback(() => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const w = panel.offsetWidth, h = panel.offsetHeight;
+    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
+    offsetRef.current = {
+      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
+      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
+    };
+    panel.style.right = offsetRef.current.x + 'px';
+    panel.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+
+  React.useEffect(() => {
+    if (!open) return;
+    clampToViewport();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', clampToViewport);
+      return () => window.removeEventListener('resize', clampToViewport);
+    }
+    const ro = new ResizeObserver(clampToViewport);
+    ro.observe(document.documentElement);
+    return () => ro.disconnect();
+  }, [open, clampToViewport]);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode') setOpen(true);
+      else if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const dismiss = () => {
+    setOpen(false);
+    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+  };
+
+  const onDragStart = (e) => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY;
+    const startRight = window.innerWidth - r.right;
+    const startBottom = window.innerHeight - r.bottom;
+    const move = (ev) => {
+      offsetRef.current = {
+        x: startRight - (ev.clientX - sx),
+        y: startBottom - (ev.clientY - sy),
+      };
+      clampToViewport();
+    };
+    const up = () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  };
+
+  if (!open) return null;
+  return (
+    <>
+      <style>{__TWEAKS_STYLE}</style>
+      <div ref={dragRef} className="twk-panel" data-noncommentable=""
+           style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+        <div className="twk-hd" onMouseDown={onDragStart}>
+          <b>{title}</b>
+          <button className="twk-x" aria-label="Close tweaks"
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onClick={dismiss}>✕</button>
+        </div>
+        <div className="twk-body">
+          {children}
+          {hasDeckStage && railEnabled && !noDeckControls && (
+            <TweakSection label="Deck">
+              <TweakToggle label="Thumbnail rail" value={railVisible} onChange={toggleRail} />
+            </TweakSection>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ── Layout helpers ──────────────────────────────────────────────────────────
+
+function TweakSection({ label, children }) {
+  return (
+    <>
+      <div className="twk-sect">{label}</div>
+      {children}
+    </>
+  );
+}
+
+function TweakRow({ label, value, children, inline = false }) {
+  return (
+    <div className={inline ? 'twk-row twk-row-h' : 'twk-row'}>
+      <div className="twk-lbl">
+        <span>{label}</span>
+        {value != null && <span className="twk-val">{value}</span>}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+// ── Controls ────────────────────────────────────────────────────────────────
+
+function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
+  return (
+    <TweakRow label={label} value={`${value}${unit}`}>
+      <input type="range" className="twk-slider" min={min} max={max} step={step}
+             value={value} onChange={(e) => onChange(Number(e.target.value))} />
+    </TweakRow>
+  );
+}
+
+function TweakToggle({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <button type="button" className="twk-toggle" data-on={value ? '1' : '0'}
+              role="switch" aria-checked={!!value}
+              onClick={() => onChange(!value)}><i /></button>
+    </div>
+  );
+}
+
+function TweakRadio({ label, value, options, onChange }) {
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  // The active value is read by pointer-move handlers attached for the lifetime
+  // of a drag — ref it so a stale closure doesn't fire onChange for every move.
+  const valueRef = React.useRef(value);
+  valueRef.current = value;
+
+  // Segments wrap mid-word once per-segment width runs out. The track is
+  // ~248px (280 panel − 28 body pad − 4 seg pad), each button loses 12px
+  // to its own padding, and 11.5px system-ui averages ~6.3px/char — so 2
+  // options fit ~16 chars each, 3 fit ~10. Past that (or >3 options), fall
+  // back to a dropdown rather than wrap.
+  const labelLen = (o) => String(typeof o === 'object' ? o.label : o).length;
+  const maxLen = options.reduce((m, o) => Math.max(m, labelLen(o)), 0);
+  const fitsAsSegments = maxLen <= ({ 2: 16, 3: 10 }[options.length] ?? 0);
+  if (!fitsAsSegments) {
+    // <select> emits strings — map back to the original option value so the
+    // fallback stays type-preserving (numbers, booleans) like the segment path.
+    const resolve = (s) => {
+      const m = options.find((o) => String(typeof o === 'object' ? o.value : o) === s);
+      return m === undefined ? s : typeof m === 'object' ? m.value : m;
+    };
+    return <TweakSelect label={label} value={value} options={options}
+                        onChange={(s) => onChange(resolve(s))} />;
+  }
+  const opts = options.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
+  const idx = Math.max(0, opts.findIndex((o) => o.value === value));
+  const n = opts.length;
+
+  const segAt = (clientX) => {
+    const r = trackRef.current.getBoundingClientRect();
+    const inner = r.width - 4;
+    const i = Math.floor(((clientX - r.left - 2) / inner) * n);
+    return opts[Math.max(0, Math.min(n - 1, i))].value;
+  };
+
+  const onPointerDown = (e) => {
+    setDragging(true);
+    const v0 = segAt(e.clientX);
+    if (v0 !== valueRef.current) onChange(v0);
+    const move = (ev) => {
+      if (!trackRef.current) return;
+      const v = segAt(ev.clientX);
+      if (v !== valueRef.current) onChange(v);
+    };
+    const up = () => {
+      setDragging(false);
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+
+  return (
+    <TweakRow label={label}>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
+           className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+        <div className="twk-seg-thumb"
+             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
+                      width: `calc((100% - 4px) / ${n})` }} />
+        {opts.map((o) => (
+          <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakSelect({ label, value, options, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <select className="twk-field" value={value} onChange={(e) => onChange(e.target.value)}>
+        {options.map((o) => {
+          const v = typeof o === 'object' ? o.value : o;
+          const l = typeof o === 'object' ? o.label : o;
+          return <option key={v} value={v}>{l}</option>;
+        })}
+      </select>
+    </TweakRow>
+  );
+}
+
+function TweakText({ label, value, placeholder, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <input className="twk-field" type="text" value={value} placeholder={placeholder}
+             onChange={(e) => onChange(e.target.value)} />
+    </TweakRow>
+  );
+}
+
+function TweakNumber({ label, value, min, max, step = 1, unit = '', onChange }) {
+  const clamp = (n) => {
+    if (min != null && n < min) return min;
+    if (max != null && n > max) return max;
+    return n;
+  };
+  const startRef = React.useRef({ x: 0, val: 0 });
+  const onScrubStart = (e) => {
+    e.preventDefault();
+    startRef.current = { x: e.clientX, val: value };
+    const decimals = (String(step).split('.')[1] || '').length;
+    const move = (ev) => {
+      const dx = ev.clientX - startRef.current.x;
+      const raw = startRef.current.val + dx * step;
+      const snapped = Math.round(raw / step) * step;
+      onChange(clamp(Number(snapped.toFixed(decimals))));
+    };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+  return (
+    <div className="twk-num">
+      <span className="twk-num-lbl" onPointerDown={onScrubStart}>{label}</span>
+      <input type="number" value={value} min={min} max={max} step={step}
+             onChange={(e) => onChange(clamp(Number(e.target.value)))} />
+      {unit && <span className="twk-num-unit">{unit}</span>}
+    </div>
+  );
+}
+
+// Relative-luminance contrast pick — checkmarks drawn over a swatch need to
+// read on both #111 and #fafafa without per-option configuration. Hex input
+// only (#rgb / #rrggbb); named or rgb()/hsl() colors fall through to "light".
+function __twkIsLight(hex) {
+  const h = String(hex).replace('#', '');
+  const x = h.length === 3 ? h.replace(/./g, (c) => c + c) : h.padEnd(6, '0');
+  const n = parseInt(x.slice(0, 6), 16);
+  if (Number.isNaN(n)) return true;
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  return r * 299 + g * 587 + b * 114 > 148000;
+}
+
+const __TwkCheck = ({ light }) => (
+  <svg viewBox="0 0 14 14" aria-hidden="true">
+    <path d="M3 7.2 5.8 10 11 4.2" fill="none" strokeWidth="2.2"
+          strokeLinecap="round" strokeLinejoin="round"
+          stroke={light ? 'rgba(0,0,0,.78)' : '#fff'} />
+  </svg>
+);
+
+// TweakColor — curated color/palette picker. Each option is either a single
+// hex string or an array of 1-5 hex strings; the card adapts — a lone color
+// renders solid, a palette renders colors[0] as the hero (left ~2/3) with the
+// rest stacked in a sharp column on the right. onChange emits the
+// option in the shape it was passed (string stays string, array stays array).
+// Without options it falls back to the native color input for back-compat.
+function TweakColor({ label, value, options, onChange }) {
+  if (!options || !options.length) {
+    return (
+      <div className="twk-row twk-row-h">
+        <div className="twk-lbl"><span>{label}</span></div>
+        <input type="color" className="twk-swatch" value={value}
+               onChange={(e) => onChange(e.target.value)} />
+      </div>
+    );
+  }
+  // Native <input type=color> emits lowercase hex per the HTML spec, so
+  // compare case-insensitively. String() guards JSON.stringify(undefined),
+  // which returns the primitive undefined (no .toLowerCase).
+  const key = (o) => String(JSON.stringify(o)).toLowerCase();
+  const cur = key(value);
+  return (
+    <TweakRow label={label}>
+      <div className="twk-chips" role="radiogroup">
+        {options.map((o, i) => {
+          const colors = Array.isArray(o) ? o : [o];
+          const [hero, ...rest] = colors;
+          const sup = rest.slice(0, 4);
+          const on = key(o) === cur;
+          return (
+            <button key={i} type="button" className="twk-chip" role="radio"
+                    aria-checked={on} data-on={on ? '1' : '0'}
+                    aria-label={colors.join(', ')} title={colors.join(' · ')}
+                    style={{ background: hero }}
+                    onClick={() => onChange(o)}>
+              {sup.length > 0 && (
+                <span>
+                  {sup.map((c, j) => <i key={j} style={{ background: c }} />)}
+                </span>
+              )}
+              {on && <__TwkCheck light={__twkIsLight(hero)} />}
+            </button>
+          );
+        })}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakButton({ label, onClick, secondary = false }) {
+  return (
+    <button type="button" className={secondary ? 'twk-btn secondary' : 'twk-btn'}
+            onClick={onClick}>{label}</button>
+  );
+}
+
+Object.assign(window, {
+  useTweaks, TweaksPanel, TweakSection, TweakRow,
+  TweakSlider, TweakToggle, TweakRadio, TweakSelect,
+  TweakText, TweakNumber, TweakColor, TweakButton,
+});
+
+</script>
+
+<!-- ===== inlined: components.jsx ===== -->
+<script type="text/babel">
+/* global React */
+const { useState, useEffect, useRef, useCallback, useMemo } = React;
+
+// ============================================================
+// PRIMITIVES
+// ============================================================
+
+const Badge = ({ kind, label }) => {
+  return <span className={`badge badge--${kind}`}>{label}</span>;
+};
+
+const LinkChip = ({ kind, label, href }) => {
+  return (
+    <a className={`link-chip link-chip--${kind}`} href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noreferrer">
+      <span className="link-chip__dot" />
+      {label}
+      <span className="link-chip__arrow">→</span>
+    </a>
+  );
+};
+
+// EmptyState — renders a "Connect <Tool>" card when config.tools.<tool>.enabled === false,
+// or a neutral "All clear" message when enabled but the data array is empty.
+// Reads window.DAILY_DASH_CONFIG (written into the HTML at /daily-dash setup time).
+const EmptyState = ({ tool, valueProp, allClearText }) => {
+  const cfg = (window.DAILY_DASH_CONFIG && window.DAILY_DASH_CONFIG.tools) || {};
+  const isEnabled = cfg[tool] && cfg[tool].enabled === true;
+  if (!isEnabled) {
+    const label = tool.charAt(0).toUpperCase() + tool.slice(1).replace('_', ' ');
+    return (
+      <div className="empty-state empty-state--connect">
+        <div className="empty-state__h">Connect {label}</div>
+        <p className="empty-state__body">{valueProp}</p>
+        <p className="empty-state__hint">Settings → Connectors → Add {label}, then run <code>/daily-dash</code>.</p>
+      </div>
+    );
+  }
+  return (
+    <div className="empty-state empty-state--clear">
+      <p className="empty-state__body">{allClearText || 'All clear.'}</p>
+    </div>
+  );
+};
+
+// ConfidenceTag — small chip showing data freshness/reliability next to a count.
+// confidence: 'high' | 'med' | 'low'. Set by /daily-dash refresh per surface.
+const ConfidenceTag = ({ level }) => {
+  if (!level) return null;
+  return <span className={`conf-tag conf-tag--${level}`}>{level}</span>;
+};
+
+// StatusChangeBadge — renders prev → now when a work item flipped status since last refresh.
+const StatusChangeBadge = ({ prev, now }) => {
+  if (!prev || !now || prev === now) return null;
+  return (
+    <span className="status-change">
+      <span className="status-change__prev">{prev}</span>
+      <span className="status-change__arrow">→</span>
+      <span className="status-change__now">{now}</span>
+    </span>
+  );
+};
+
+// MomentMarker — small badge on cards where calendar + transcript + slack thread merged.
+const MomentMarker = ({ sources }) => {
+  if (!sources || sources.length < 2) return null;
+  return (
+    <span className="moment-marker" title={`Linked sources: ${sources.join(', ')}`}>
+      moment · {sources.length}
+    </span>
+  );
+};
+
+const DashRead = ({ text }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className={`dash-read ${open ? 'is-open' : ''}`}>
+      <button className="dash-read__toggle" onClick={() => setOpen(!open)}>
+        <span className="dash-read__caret">{open ? '−' : '+'}</span>
+        <span className="dash-read__label">The read</span>
+        {!open && <span className="dash-read__preview">— {text.slice(0, 60)}{text.length > 60 ? '…' : ''}</span>}
+      </button>
+      {open && <div className="dash-read__body"><em>—</em> {text}</div>}
+    </div>
+  );
+};
+
+const DraftReply = ({ text }) => {
+  const [open, setOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const onCopy = () => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    });
+  };
+  return (
+    <div className={`draft-reply ${open ? 'is-open' : ''}`}>
+      <button className="draft-reply__toggle" onClick={() => setOpen(!open)}>
+        <span className="draft-reply__caret">{open ? '−' : '+'}</span>
+        Draft reply
+      </button>
+      {open && (
+        <div className="draft-reply__body">
+          <pre>{text}</pre>
+          <button className="draft-reply__copy" onClick={onCopy}>{copied ? 'Copied' : 'Copy'}</button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ============================================================
+// CARD — main task card with drag/check/dismiss
+// ============================================================
+
+const DragHandle = (props) => (
+  <span className="drag-handle" {...props} aria-label="Drag to reorder">
+    <svg width="10" height="16" viewBox="0 0 10 16" fill="none">
+      <circle cx="2" cy="3" r="1.1" /><circle cx="8" cy="3" r="1.1" />
+      <circle cx="2" cy="8" r="1.1" /><circle cx="8" cy="8" r="1.1" />
+      <circle cx="2" cy="13" r="1.1" /><circle cx="8" cy="13" r="1.1" />
+    </svg>
+  </span>
+);
+
+const CheckCircle = ({ done, onClick }) => (
+  <button
+    className={`check-circle ${done ? 'is-done' : ''}`}
+    onClick={onClick}
+    aria-label={done ? 'Mark not done' : 'Mark done'}
+  >
+    {done && (
+      <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+        <path d="M2 5.5L4.5 8L9 3" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    )}
+  </button>
+);
+
+const Card = ({ card, done, onCheck, onDismiss, onSnooze, dragRef }) => {
+  return (
+    <div
+      className={`card card--${card.kind || 'default'} ${done ? 'is-done' : ''}`}
+      data-id={card.id}
+      ref={dragRef}
+    >
+      <div className="card__rail">
+        <DragHandle className="js-drag-handle" />
+        <CheckCircle done={done} onClick={() => onCheck(card.id)} />
+      </div>
+
+      <div className="card__when">
+        <div className="card__when-main">{card.when}</div>
+        {card.whenSub && <div className="card__when-sub">{card.whenSub}</div>}
+      </div>
+
+      <div className="card__body">
+        {card.eyebrow && <div className="card__eyebrow">{card.eyebrow}</div>}
+        <div className="card__title">{card.title}</div>
+        {card.sub && <div className="card__sub">{card.sub}</div>}
+
+        {card.draft && <DraftReply text={card.draft} />}
+        {card.read && <DashRead text={card.read} />}
+
+        {card.links && card.links.length > 0 && (
+          <div className="card__links">
+            {card.links.map((l, i) => <LinkChip key={i} {...l} />)}
+          </div>
+        )}
+      </div>
+
+      <div className="card__meta">
+        <div className="card__badges">
+          {(card.badges || []).map((b, i) => <Badge key={i} {...b} />)}
+        </div>
+        <div className="card__quick-actions">
+          <button className="quick-action" title="Snooze 1 day" onClick={() => onSnooze(card.id)}>
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" strokeWidth="1.2">
+              <circle cx="6.5" cy="7" r="4.5" /><path d="M6.5 4.5v3l1.8 1" strokeLinecap="round" />
+            </svg>
+          </button>
+          <button className="quick-action" title="Dismiss" onClick={() => onDismiss(card.id)}>
+            <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round">
+              <path d="M3 3l7 7M10 3l-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Compact card for follow-ups / planning lists
+const CompactRow = ({ card, done, onCheck, onDismiss, onSnooze }) => {
+  return (
+    <div className={`compact ${done ? 'is-done' : ''}`} data-id={card.id}>
+      <div className="compact__rail">
+        <DragHandle className="js-drag-handle" />
+        <CheckCircle done={done} onClick={() => onCheck(card.id)} />
+      </div>
+      <div className="compact__when">{card.when}</div>
+      <div className="compact__body">
+        <a className="compact__title" href={card.href} target="_blank" rel="noreferrer">{card.title}</a>
+        {card.sub && <div className="compact__sub">{card.sub}</div>}
+      </div>
+      <div className="compact__badges">
+        {(card.badges || []).map((b, i) => <Badge key={i} {...b} />)}
+      </div>
+      <div className="compact__quick-actions">
+        <button className="quick-action" title="Snooze" onClick={() => onSnooze(card.id)}>
+          <svg width="12" height="12" viewBox="0 0 13 13" fill="none" stroke="currentColor" strokeWidth="1.2">
+            <circle cx="6.5" cy="7" r="4.5" /><path d="M6.5 4.5v3l1.8 1" strokeLinecap="round" />
+          </svg>
+        </button>
+        <button className="quick-action" title="Dismiss" onClick={() => onDismiss(card.id)}>
+          <svg width="12" height="12" viewBox="0 0 13 13" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round">
+            <path d="M3 3l7 7M10 3l-7 7" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// ============================================================
+// SECTION header
+// ============================================================
+
+const SectionHeader = ({ glyph, label, count, action }) => (
+  <div className="section-header">
+    {glyph && <span className="section-header__glyph">{glyph}</span>}
+    <span className="section-header__label">{label}</span>
+    {count != null && <span className="section-header__count">{count}</span>}
+    <span className="section-header__rule" />
+    {action}
+  </div>
+);
+
+// ============================================================
+// DRAGGABLE LIST — uses HTML5 drag-and-drop, persists order
+// ============================================================
+
+function DraggableList({ ids, onReorder, renderItem }) {
+  const [dragIdx, setDragIdx] = useState(null);
+  const [overIdx, setOverIdx] = useState(null);
+
+  const handleDragStart = (i) => (e) => {
+    setDragIdx(i);
+    e.dataTransfer.effectAllowed = 'move';
+    // empty image to keep card visible while dragging — browser default is fine; just ensure transfer payload exists
+    try { e.dataTransfer.setData('text/plain', String(i)); } catch (_) {}
+  };
+  const handleDragOver = (i) => (e) => {
+    e.preventDefault();
+    if (i !== overIdx) setOverIdx(i);
+  };
+  const handleDragEnd = () => {
+    if (dragIdx != null && overIdx != null && dragIdx !== overIdx) {
+      const next = ids.slice();
+      const [moved] = next.splice(dragIdx, 1);
+      next.splice(overIdx, 0, moved);
+      onReorder(next);
+    }
+    setDragIdx(null);
+    setOverIdx(null);
+  };
+
+  return (
+    <div className="dlist" onDragEnd={handleDragEnd}>
+      {ids.map((id, i) => (
+        <div
+          key={id}
+          className={`dlist__row ${dragIdx === i ? 'is-dragging' : ''} ${overIdx === i && dragIdx !== i ? 'is-over' : ''}`}
+          draggable
+          onDragStart={handleDragStart(i)}
+          onDragOver={handleDragOver(i)}
+        >
+          {renderItem(id, i)}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ============================================================
+// QUICK ADD
+// ============================================================
+
+const QuickAdd = ({ onAdd, placeholder = 'Add a quick note for today…' }) => {
+  const [val, setVal] = useState('');
+  const [open, setOpen] = useState(false);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setOpen(true);
+        setTimeout(() => inputRef.current?.focus(), 50);
+      }
+      if (e.key === 'Escape') setOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  const submit = (e) => {
+    e?.preventDefault();
+    if (!val.trim()) return;
+    onAdd(val.trim());
+    setVal('');
+    setOpen(false);
+  };
+
+  return (
+    <div className={`quick-add ${open ? 'is-open' : ''}`}>
+      {!open ? (
+        <button className="quick-add__trigger" onClick={() => { setOpen(true); setTimeout(() => inputRef.current?.focus(), 50); }}>
+          <span>+</span> Add a card <kbd>⌘K</kbd>
+        </button>
+      ) : (
+        <form className="quick-add__form" onSubmit={submit}>
+          <input
+            ref={inputRef}
+            value={val}
+            onChange={(e) => setVal(e.target.value)}
+            placeholder={placeholder}
+            onBlur={() => { if (!val) setOpen(false); }}
+          />
+          <button type="submit">Add</button>
+        </form>
+      )}
+    </div>
+  );
+};
+
+// ============================================================
+// UNDO TOAST
+// ============================================================
+
+const Toast = ({ message, onUndo, onDismiss }) => {
+  useEffect(() => {
+    const t = setTimeout(() => onDismiss(), 5500);
+    return () => clearTimeout(t);
+  }, [onDismiss]);
+  return (
+    <div className="toast">
+      <span className="toast__msg">{message}</span>
+      <button className="toast__undo" onClick={onUndo}>Undo</button>
+      <button className="toast__close" onClick={onDismiss} aria-label="Close">×</button>
+    </div>
+  );
+};
+
+// ============================================================
+// SHIPPED CHIP
+// ============================================================
+
+const ShippedChip = ({ chip }) => (
+  <a className="shipped-chip" href={chip.href} target={chip.href.startsWith('http') ? '_blank' : undefined} rel="noreferrer">
+    <div className="shipped-chip__dot" />
+    <div className="shipped-chip__title">{chip.title}</div>
+    <div className="shipped-chip__meta">{chip.meta}</div>
+    <div className="shipped-chip__arrow">↗</div>
+  </a>
+);
+
+// Export to window
+Object.assign(window, {
+  Badge, LinkChip, DashRead, DraftReply, Card, CompactRow,
+  EmptyState, ConfidenceTag, StatusChangeBadge, MomentMarker,
+  SectionHeader, DraggableList, QuickAdd, Toast, ShippedChip,
+  CheckCircle, DragHandle,
+});
+
+</script>
+
+<!-- ===== inlined: today-mockups.jsx ===== -->
+<script type="text/babel">
+/* global React, DAILY_DASH_DATA, Badge, DraggableList */
+const { useState, useMemo, useEffect } = React;
+const D = window.DAILY_DASH_DATA;
+
+// ============================================================
+// Helpers
+// ============================================================
+
+const prettyTime = (t) => {
+  if (t.includes(' ')) return t;
+  const [h, m] = t.split(':').map(Number);
+  const ampm = h >= 12 ? 'pm' : 'am';
+  const hh = ((h + 11) % 12) + 1;
+  return m === 0 ? `${hh}${ampm}` : `${hh}:${String(m).padStart(2, '0')}${ampm}`;
+};
+const evMinutes = (ev) => {
+  if (ev.start.includes(' ')) return 9999;
+  const [h, m] = ev.start.split(':').map(Number);
+  return h * 60 + m;
+};
+const evEndMinutes = (ev) => {
+  if (ev.end && !ev.end.includes(' ')) {
+    const [h, m] = ev.end.split(':').map(Number);
+    return h * 60 + m;
+  }
+  return evMinutes(ev) + 30;
+};
+const orderedIds = (allIds, savedOrder) => {
+  if (!savedOrder || !savedOrder.length) return allIds;
+  const set = new Set(allIds);
+  const ordered = savedOrder.filter((id) => set.has(id));
+  const remaining = allIds.filter((id) => !ordered.includes(id));
+  return [...ordered, ...remaining];
+};
+const getNowMinutes = () => {
+  const now = new Date();
+  const m = now.getHours() * 60 + now.getMinutes();
+  if (m < 8 * 60 || m > 17 * 60) return 10 * 60 + 30;
+  return m;
+};
+
+// ============================================================
+// Lifecycle board model — Active vs Shipped tabs, blocked col added
+// ============================================================
+const ACTIVE_COLS = [
+  { key: 'backlog',    label: 'Backlog',     tone: 'olive' },
+  { key: 'planning',   label: 'Planning',    tone: 'mustard' },
+  { key: 'inprogress', label: 'In progress', tone: 'persimmon' },
+  { key: 'review',     label: 'Review',      tone: 'plum' },
+  { key: 'blocked',    label: 'Blocked',     tone: 'terracotta' },
+  { key: 'shipped',    label: 'Shipped',     tone: 'sage' }, // drag-to-ship target; mirrors the Shipped tab as archive view
+];
+const SHIPPED_COLS = [
+  { key: 'shipped',    label: 'Shipped',     tone: 'sage' },
+];
+
+function buildBoardSeed() {
+  const all = [
+    ...D.launches.map(c => ({ ...c, _src: 'launch' })),
+    ...D.watching_p0.map(c => ({ ...c, _src: 'p0' })),
+    ...D.planning.map(c => ({ ...c, _src: 'planning' })),
+  ];
+  const seed = {};
+  all.forEach(c => {
+    const labels = (c.badges || []).map(b => (b.label || '').toLowerCase());
+    if (labels.some(l => l === 'blocked')) seed[c.id] = 'blocked';
+    else if (labels.some(l => l === 'backlog')) seed[c.id] = 'backlog';
+    else if (labels.some(l => l === 'planning')) seed[c.id] = 'planning';
+    else if (labels.some(l => l === 'reviewing' || l === 'review')) seed[c.id] = 'review';
+    else seed[c.id] = 'inprogress';
+  });
+  D.shipped.forEach(c => { seed[c.id] = 'shipped'; });
+  return { items: [...all, ...D.shipped.map(c => ({ ...c, _src: 'shipped' }))], seed };
+}
+
+const tintOfCard = (item) => {
+  const labels = (item.badges || []).map(b => (b.label || '').toLowerCase());
+  if (labels.some(l => l === 'overdue' || l === 'blocked' || l.includes('day') && /^\d/.test(l))) return 'overdue';
+  if (labels.some(l => l === 'today' || l === 'tomorrow' || l === 'p0')) return 'today';
+  return null;
+};
+
+// ============================================================
+// COLLAPSIBLE BLOCK
+// ============================================================
+function CollapsibleBlock({ title, sub, color, defaultOpen, children, count }) {
+  const [open, setOpen] = useState(!!defaultOpen);
+  return (
+    <section className={`m1-block m1-block--${color} ${open ? 'is-open' : 'is-closed'}`}>
+      <button className="m1-block__head" onClick={() => setOpen(!open)}>
+        <div className="m1-block__head-l">
+          <h2>{title}</h2>
+          {count != null && <span className="m1-block__count">{count}</span>}
+        </div>
+        <div className="m1-block__head-r">
+          {sub && <span className="m1-block__sub">{sub}</span>}
+          <span className="m1-block__chev">{open ? '–' : '+'}</span>
+        </div>
+      </button>
+      {open && <div className="m1-block__body">{children}</div>}
+    </section>
+  );
+}
+
+// ============================================================
+// PULSE
+// ============================================================
+function PulseCard() {
+  const counters = D.meta.weather.filter(w => w.label.toLowerCase() !== 'calendar today');
+  const [readOpen, setReadOpen] = React.useState(true);
+  const read = D.meta.dashRead;
+  // dashRead is either a string (legacy) or { headline, items } (current). Set by /daily-dash refresh.
+  const isStructured = read && typeof read === 'object' && Array.isArray(read.items);
+  return (
+    <section className="m-pulse">
+      <div className="m-pulse__top">
+        <div className="m-pulse__date">
+          <div className="m-pulse__day">{D.meta.today.split(',')[0]}</div>
+          <div className="m-pulse__num">{D.meta.todayShort}</div>
+        </div>
+        <div className="m-pulse__metrics">
+          {counters.map((w, i) => (
+            <div key={i} className={`m-metric m-metric--${w.tone}`}>
+              <span className="m-metric__num">{w.num}</span>
+              <span className="m-metric__label">{w.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="m-pulse__read">
+        <button
+          type="button"
+          className="m-pulse__read-head"
+          aria-expanded={readOpen}
+          onClick={() => setReadOpen(o => !o)}>
+          <span className="m-pulse__read-eyebrow">The read</span>
+          <span className={`m-pulse__read-chev ${readOpen ? 'is-open' : ''}`}>{readOpen ? '–' : '+'}</span>
+        </button>
+        {readOpen && (
+          <div className="m-pulse__read-body">
+            {isStructured ? (
+              <React.Fragment>
+                {read.headline && <p>{read.headline}</p>}
+                <ol className="m-pulse__read-list">
+                  {read.items.map((it, i) => <li key={i}>{it}</li>)}
+                </ol>
+              </React.Fragment>
+            ) : (
+              <p style={{margin:0}}>{read}</p>
+            )}
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+// ============================================================
+// EVENT
+// ============================================================
+function EventRow({ event, expanded, onToggle, note, onNote, noteTs }) {
+  const ev = event;
+  const dur = (() => {
+    if (ev.start.includes(' ')) return '';
+    const [h1, m1] = ev.start.split(':').map(Number);
+    const [h2, m2] = ev.end.split(':').map(Number);
+    const min = (h2 * 60 + m2) - (h1 * 60 + m1);
+    return min >= 60 ? `${Math.floor(min/60)}h${min%60 ? ' '+(min%60)+'m' : ''}` : `${min}m`;
+  })();
+  const meta = [];
+  if (ev.location) meta.push(ev.location);
+  if (ev.attendees) meta.push(ev.attendees.slice(0, 3).join(', ') + (ev.attendees.length > 3 ? ' +' + (ev.attendees.length - 3) : ''));
+  return (
+    <article className={`m-event m-event--${ev.tone} ${expanded ? 'is-open' : ''}`}>
+      <button className="m-event__row" onClick={onToggle}>
+        <div className="m-event__time">
+          <div className="m-event__start">{prettyTime(ev.start)}</div>
+          {dur && <div className="m-event__dur">{dur}</div>}
+        </div>
+        <div className="m-event__bar" />
+        <div className="m-event__line">
+          <span className="m-event__title">{ev.title}</span>
+          {meta.length > 0 && <span className="m-event__inline-meta">: {meta.join(' — ')}</span>}
+        </div>
+        <div className="m-event__chev">{expanded ? '–' : '+'}</div>
+      </button>
+      {expanded && (
+        <div className="m-event__detail">
+          <p className="m-event__summary">{ev.summary}</p>
+          {ev.planningPreview && (
+            <div className="m-event__notes">
+              <div className="m-event__notes-h">Planning notes</div>
+              <p>{ev.planningPreview}</p>
+            </div>
+          )}
+          <div className="m-event__actions">
+            {ev.planningHref && (
+              <a className="cta cta--primary" href={ev.planningHref}>Open notes ↗</a>
+            )}
+            {ev.links && ev.links.map((l, i) => (
+              <a key={i} className={`cta cta--${l.kind}`} href={l.href}>{l.label} ↗</a>
+            ))}
+          </div>
+          {onNote && <CardNote cardId={ev.id} note={note} onNote={onNote} ts={noteTs} />}
+        </div>
+      )}
+    </article>
+  );
+}
+
+// ============================================================
+// DAY STREAM
+// ============================================================
+function DayStream({ calTab, onTab, notes, onNote, notesTs }) {
+  const noteProps = (id) => ({
+    note: (notes || {})[id],
+    onNote,
+    noteTs: (notesTs || {})[id],
+  });
+  const [openEv, setOpenEv] = useState(null);
+  const [showPast, setShowPast] = useState(false);
+  const [collapsedBuckets, setCollapsedBuckets] = useState({});
+  const nowMin = getNowMinutes();
+  const toggleBucket = (id) => setCollapsedBuckets(s => ({ ...s, [id]: !s[id] }));
+
+  if (calTab === 'today') {
+    if (D.today_calendar.length === 0) {
+      return (
+        <div>
+          <div className="m1-toolbar"><CalendarTabs active={calTab} onChange={onTab} /></div>
+          <window.EmptyState tool="calendar" valueProp="See today's events bucketed by morning / midday / afternoon, with linked transcripts and prep notes." allClearText="No events today." />
+        </div>
+      );
+    }
+    const buckets = { morning: [], midday: [], afternoon: [] };
+    const hidden = [];
+    D.today_calendar.forEach(ev => {
+      if (!showPast && evEndMinutes(ev) <= nowMin) { hidden.push(ev); return; }
+      const h = parseInt(ev.start.split(':')[0], 10);
+      if (h < 12) buckets.morning.push(ev);
+      else if (h < 14) buckets.midday.push(ev);
+      else buckets.afternoon.push(ev);
+    });
+    const meta = [
+      { id: 'morning',   label: 'Morning',   tone: 'persimmon' },
+      { id: 'midday',    label: 'Midday',    tone: 'mustard' },
+      { id: 'afternoon', label: 'Afternoon', tone: 'plum' },
+    ];
+
+    return (
+      <div>
+        <div className="m1-toolbar">
+          <CalendarTabs active={calTab} onChange={onTab} />
+          {hidden.length > 0 && (
+            <button className="cta cta--ghost" onClick={() => setShowPast(!showPast)}>
+              {showPast ? `Hide ${hidden.length} completed` : `Show ${hidden.length} completed`}
+            </button>
+          )}
+          {showPast && hidden.length === 0 && (
+            <button className="cta cta--ghost" onClick={() => setShowPast(false)}>Hide completed</button>
+          )}
+        </div>
+        <div className="m3-stream">
+          {meta.map(bm => {
+            const isCollapsed = collapsedBuckets[bm.id];
+            return (
+              <div key={bm.id} className={`m3-bucket m3-bucket--${bm.tone} ${isCollapsed ? 'is-collapsed' : ''}`}>
+                <button className="m3-bucket__head" onClick={() => toggleBucket(bm.id)}>
+                  <div className="m3-bucket__label">{bm.label}</div>
+                  <div className="m3-bucket__hint">{isCollapsed ? `+ ${buckets[bm.id].length}` : '— hide'}</div>
+                </button>
+                <div className="m3-bucket__body">
+                  {buckets[bm.id].length === 0 ? (
+                    <div className="m3-bucket__empty">— open block —</div>
+                  ) : (
+                    buckets[bm.id].map(ev => (
+                      <EventRow key={ev.id} event={ev}
+                        expanded={openEv === ev.id}
+                        onToggle={() => setOpenEv(openEv === ev.id ? null : ev.id)}
+                        {...noteProps(ev.id)} />
+                    ))
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  const events = calTab === 'tomorrow' ? D.tomorrow_calendar : D.restweek_calendar;
+  return (
+    <div>
+      <div className="m1-toolbar">
+        <CalendarTabs active={calTab} onChange={onTab} />
+      </div>
+      <div className="m-agenda">
+        {events.map(ev => (
+          <EventRow key={ev.id} event={ev}
+            expanded={openEv === ev.id}
+            onToggle={() => setOpenEv(openEv === ev.id ? null : ev.id)}
+            {...noteProps(ev.id)} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function CalendarTabs({ active, onChange }) {
+  const tabs = [
+    { id: 'today',     label: 'Today',         count: D.today_calendar.length },
+    { id: 'tomorrow',  label: 'Tomorrow',      count: D.tomorrow_calendar.length },
+    { id: 'restweek',  label: 'Rest of week',  count: D.restweek_calendar.length },
+  ];
+  return (
+    <div className="m-subtabs">
+      {tabs.map(t => (
+        <button key={t.id}
+          className={`m-subtab ${active === t.id ? 'is-active' : ''}`}
+          onClick={() => onChange(t.id)}>
+          <span>{t.label}</span>
+          <span className="m-subtab__count">{t.count}</span>
+        </button>
+      ))}
+    </div>
+  );
+}
+
+// ============================================================
+// QUEUE CARDS — CTAs use copper (primary) + sage (slack-green)
+// ============================================================
+function CardLite({ card, done, onCheck, note, onNote, noteTs }) {
+  const [open, setOpen] = React.useState(false);
+  const hasDetail = !!(card.eyebrow || card.sub || (card.links && card.links.length) || onNote);
+  return (
+    <div className={`m-card m-card--${card.kind || 'default'} ${done ? 'is-done' : ''} ${open ? 'is-open' : ''}`}>
+      <div
+        className="m-card__head"
+        role="button"
+        tabIndex={0}
+        onClick={() => hasDetail && setOpen(o => !o)}
+        onKeyDown={(e) => { if (hasDetail && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); setOpen(o => !o); } }}>
+        <button
+          type="button"
+          className={`m-check ${done ? 'is-done' : ''}`}
+          onClick={(e) => { e.stopPropagation(); onCheck(card.id); }}>
+          {done && <svg width="10" height="10" viewBox="0 0 11 11"><path d="M2 5.5L4.5 8L9 3" stroke="currentColor" strokeWidth="1.6" fill="none" strokeLinecap="round"/></svg>}
+        </button>
+        <div className="m-card__when">
+          <div className="m-card__when-main">{card.when}</div>
+          {card.whenSub && <div className="m-card__when-sub">{card.whenSub}</div>}
+        </div>
+        <div className="m-card__body">
+          <div className="m-card__title">{card.title}</div>
+        </div>
+        <div className="m-card__meta">
+          <div className="m-card__badges">
+            {(card.badges || []).map((b, i) => <Badge key={i} {...b} />)}
+          </div>
+        </div>
+        {hasDetail && <span className="m-card__chev">{open ? '–' : '+'}</span>}
+      </div>
+      {open && hasDetail && (
+        <div className="m-card__detail" onClick={(e) => e.stopPropagation()}>
+          {card.eyebrow && <div className="m-card__eyebrow">{card.eyebrow}</div>}
+          {card.sub && <div className="m-card__sub">{card.sub}</div>}
+          {card.links && (
+            <div className="m-card__links">
+              {card.links.map((l, i) => {
+                // Match calendar card styling: first link copper (primary), rest sage (green)
+                const cls = i === 0 ? 'cta--primary' : 'cta--slack';
+                return <a key={i} className={`cta ${cls}`} href={l.href}>{l.label} ↗</a>;
+              })}
+            </div>
+          )}
+          {onNote && <CardNote cardId={card.id} note={note} onNote={onNote} ts={noteTs} />}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ============================================================
+// CARD NOTE — toggleable textarea on any expanded card surface.
+// Claude Code reads state.notes on the next /daily-dash refresh (requires localhost mode).
+// Free-form text; intent is classified during refresh ("pausing this", "this never happened",
+// "killed", or free-form context → appended to the underlying task notes).
+// ============================================================
+function CardNote({ cardId, note, onNote, ts }) {
+  const [open, setOpen] = React.useState(Boolean(note));
+  const [val, setVal] = React.useState(note || '');
+  React.useEffect(() => { setVal(note || ''); }, [note]);
+  const hasNote = Boolean(note);
+  const commit = (v) => { setVal(v); onNote && onNote(cardId, v); };
+  const clear = (e) => { e && e.stopPropagation(); commit(''); setOpen(false); };
+  const tsLabel = ts ? new Date(ts).toLocaleString(undefined, { month:'short', day:'numeric', hour:'numeric', minute:'2-digit' }) : '';
+  return (
+    <div className="m-cardnote" onClick={(e) => e.stopPropagation()}>
+      {!open ? (
+        <button
+          type="button"
+          className={`m-cardnote__toggle ${hasNote ? 'has-note' : ''}`}
+          onClick={(e) => { e.stopPropagation(); setOpen(true); }}
+          title={hasNote ? 'Note picked up on the next /daily-dash refresh' : 'Leave a note for the next /daily-dash refresh to pick up'}>
+          {hasNote && <span className="m-cardnote__dot" aria-hidden />}
+          {hasNote ? 'note' : '+ leave a note'}
+        </button>
+      ) : (
+        <div className="m-cardnote__wrap">
+          <span className="m-cardnote__label">Note · picked up on the next /daily-dash refresh</span>
+          <textarea
+            className="m-cardnote__ta"
+            value={val}
+            placeholder='e.g. "pausing this for now", "this meeting never happened", "killed - not pursuing", or any free-form context'
+            onChange={(e) => commit(e.target.value)}
+            onClick={(e) => e.stopPropagation()}
+          />
+          <div className="m-cardnote__meta">
+            <span>{tsLabel ? `saved ${tsLabel}` : 'auto-saves as you type'}</span>
+            {hasNote && <button type="button" className="m-cardnote__clear" onClick={clear}>clear note</button>}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ViewMore({ count, onClick, expanded }) {
+  return (
+    <button className="cta cta--ghost m-viewmore" onClick={onClick}>
+      {expanded ? '— show less' : `+ show ${count} more`}
+    </button>
+  );
+}
+
+// ============================================================
+// LIFECYCLE BOARD — Active/Shipped tabs, hide columns, tints, drag
+// ============================================================
+function LifecycleBoard({ state, setState }) {
+  const seed = useMemo(() => buildBoardSeed(), []);
+  const [boardTab, setBoardTab] = useState('active');
+  const [openCard, setOpenCard] = useState(null);
+  const [dragId, setDragId] = useState(null);
+  const [overCol, setOverCol] = useState(null);
+  const [collapsed, setCollapsed] = useState({});
+  const [hidden, setHidden] = useState({}); // { colKey: true }
+
+  // Per-card note handler — writes to state.notes / state.notesTs (picked up on next /daily-dash refresh).
+  const onNote = (id, v) => {
+    setState(s => {
+      const nextNotes = { ...(s.notes || {}) };
+      const nextTs = { ...(s.notesTs || {}) };
+      if (v == null || v === '') { delete nextNotes[id]; delete nextTs[id]; }
+      else { nextNotes[id] = v; nextTs[id] = new Date().toISOString(); }
+      return { ...s, notes: nextNotes, notesTs: nextTs };
+    });
+  };
+
+  const moves = state.boardMoves || {};
+  const colOf = (id) => moves[id] || seed.seed[id] || 'inprogress';
+
+  const colsForTab = boardTab === 'active' ? ACTIVE_COLS : SHIPPED_COLS;
+  const visibleCols = colsForTab.filter(c => !hidden[c.key]);
+  const hiddenCols = colsForTab.filter(c => hidden[c.key]);
+
+  const grouped = {};
+  colsForTab.forEach(c => { grouped[c.key] = []; });
+  seed.items.forEach(it => {
+    const k = colOf(it.id);
+    if (grouped[k] !== undefined) grouped[k].push(it);
+  });
+
+  const moveItem = (id, col) => {
+    setState(s => ({ ...s, boardMoves: { ...(s.boardMoves || {}), [id]: col } }));
+  };
+  const toggleHide = (key) => setHidden(s => ({ ...s, [key]: !s[key] }));
+
+  const totalActive = ACTIVE_COLS.reduce((n, c) => n + (grouped[c.key]?.length || 0), 0);
+  const totalShipped = grouped['shipped']?.length || 0;
+
+  return (
+    <div>
+      <div className="m-kanban-toolbar">
+        <div className="m-subtabs">
+          <button className={`m-subtab ${boardTab === 'active' ? 'is-active' : ''}`}
+            onClick={() => setBoardTab('active')}>
+            <span>Active</span>
+            <span className="m-subtab__count">{totalActive}</span>
+          </button>
+          <button className={`m-subtab ${boardTab === 'shipped' ? 'is-active' : ''}`}
+            onClick={() => setBoardTab('shipped')}>
+            <span>Shipped</span>
+            <span className="m-subtab__count">{totalShipped}</span>
+          </button>
+        </div>
+        {hiddenCols.length > 0 && (
+          <div className="m-kanban-toolbar__hidden">
+            <span className="m-kanban-toolbar__hidden-h">Hidden:</span>
+            {hiddenCols.map(c => (
+              <button key={c.key} className="m-kcol-restore" onClick={() => toggleHide(c.key)}>
+                + {c.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="m-kanban-scroll">
+        <div className="m-kanban">
+          {visibleCols.map(col => {
+            const items = grouped[col.key] || [];
+            const showAll = collapsed[col.key];
+            const visible = showAll ? items : items.slice(0, 4);
+            return (
+              <div key={col.key}
+                className={`m-kcol m-kcol--${col.tone} ${overCol === col.key ? 'is-drop' : ''}`}
+                onDragOver={(e) => { e.preventDefault(); setOverCol(col.key); }}
+                onDragLeave={() => setOverCol(null)}
+                onDrop={(e) => { e.preventDefault(); if (dragId) moveItem(dragId, col.key); setDragId(null); setOverCol(null); }}>
+                <div className="m-kcol__head">
+                  <span className="m-kcol__label">{col.label}</span>
+                  <div style={{display:'flex', alignItems:'baseline', gap:'8px'}}>
+                    <span className="m-kcol__count">{items.length}</span>
+                    <button className="m-kcol__hide" onClick={() => toggleHide(col.key)} title="Hide column">×</button>
+                  </div>
+                </div>
+                <div className="m-kcol__body">
+                  {visible.map(item => {
+                    const isOpen = openCard === item.id;
+                    const tint = tintOfCard(item);
+                    return (
+                      <div key={item.id}
+                        className={`m-kcard ${tint ? 'm-kcard--' + tint : ''} ${isOpen ? 'is-open' : ''} ${dragId === item.id ? 'is-dragging' : ''}`}
+                        draggable
+                        onDragStart={(e) => { setDragId(item.id); e.dataTransfer.effectAllowed = 'move'; }}
+                        onDragEnd={() => { setDragId(null); setOverCol(null); }}>
+                        <button className="m-kcard__head" onClick={() => setOpenCard(isOpen ? null : item.id)}>
+                          <span className="m-kcard__grip" aria-hidden>⋮⋮</span>
+                          <span className="m-kcard__title">{item.title}</span>
+                          <span className="m-kcard__chev">{isOpen ? '–' : '+'}</span>
+                        </button>
+                        {isOpen && (() => {
+                          // Mirror FollowupRow fallback: prefer item.links, else wrap a bare item.href into a one-element links array.
+                          const kctaLinks = Array.isArray(item.links) && item.links.length
+                            ? item.links
+                            : (item.href ? [{
+                                kind: item.href.startsWith('obsidian://') ? 'obsidian'
+                                    : item.href.includes('slack.com') ? 'slack'
+                                    : 'notion',
+                                label: item.href.startsWith('obsidian://') ? 'Open in Obsidian'
+                                    : item.href.includes('slack.com') ? 'Open Slack thread'
+                                    : 'Open in Notion',
+                                href: item.href
+                              }] : []);
+                          const hasAnyDetail = item.eyebrow || item.sub || item.read || kctaLinks.length;
+                          return (
+                            <div className="m-kcard__detail">
+                              {item.eyebrow && <div className="m-kcard__eyebrow">{item.eyebrow}</div>}
+                              {item.sub && <p className="m-kcard__sub">{item.sub}</p>}
+                              {item.read && (
+                                <div className="m-kcard__read">
+                                  <span className="m-kcard__read-h">The read</span>
+                                  <p>{item.read}</p>
+                                </div>
+                              )}
+                              {!hasAnyDetail && (
+                                <p style={{margin:'0 0 10px 0', fontSize:12, color:'var(--ink-muted)', fontStyle:'italic'}}>No linked context yet — add detail on the next /daily-dash refresh.</p>
+                              )}
+                              <div className="m-kcard__links">
+                                {kctaLinks.map((l, i) => {
+                                  const isWorkItem = l.kind === 'obsidian' || /work item/i.test(l.label);
+                                  return (
+                                    <a key={i} className={`cta ${isWorkItem ? 'cta--plum' : 'cta--primary'}`} href={l.href} target="_blank" rel="noreferrer">
+                                      {isWorkItem ? 'Open Work Item ↗' : l.label + ' ↗'}
+                                    </a>
+                                  );
+                                })}
+                              </div>
+                              <CardNote cardId={item.id} note={(state.notes || {})[item.id]} onNote={onNote} ts={(state.notesTs || {})[item.id]} />
+                            </div>
+                          );
+                        })()}
+                      </div>
+                    );
+                  })}
+                  {items.length > 4 && (
+                    <button className="m-kcol__more" onClick={() => setCollapsed({ ...collapsed, [col.key]: !showAll })}>
+                      {showAll ? '— less' : `+ ${items.length - 4} more`}
+                    </button>
+                  )}
+                  {items.length === 0 && <div className="m-kcol__empty">— empty —</div>}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// TODAY MOCKUP 1
+// ============================================================
+function TodayMockup1({ state, setState, cardProps, onReorder }) {
+  const [calTab, setCalTab] = useState('today');
+  const [qTab, setQTab] = useState('plate');
+  const [qMore, setQMore] = useState(false);
+  const [fMore, setFMore] = useState(false);
+  const [openF, setOpenF] = useState(null);
+
+  const plateOrder = orderedIds(D.today_hero.map(c => c.id), state.orders.hero);
+  const plateById = Object.fromEntries(D.today_hero.map(c => [c.id, c]));
+  const plateIds = plateOrder.filter(id => plateById[id] && !state.dismissed[id]);
+  const overdueIds = orderedIds(D.overdue.map(c => c.id), state.orders.overdue).filter(id => !state.dismissed[id]);
+  const overdueById = Object.fromEntries(D.overdue.map(c => [c.id, c]));
+  const slackIds = orderedIds(D.slack.map(c => c.id), state.orders.slack).filter(id => !state.dismissed[id]);
+  const slackById = Object.fromEntries(D.slack.map(c => [c.id, c]));
+  const queues = {
+    plate:   { label: 'On plate', ids: plateIds,   by: plateById,   key: 'hero' },
+    overdue: { label: 'Overdue',  ids: overdueIds, by: overdueById, key: 'overdue' },
+    slack:   { label: 'Slack',    ids: slackIds,   by: slackById,   key: 'slack' },
+  };
+  const aq = queues[qTab];
+  const visibleQ = qMore ? aq.ids : aq.ids.slice(0, 4);
+
+  // Today shows only refresh-picked focus items (see meta.todayFollowupIds). Full triage lives on the Follow-Ups page.
+  const todayPicks = (D.meta && D.meta.todayFollowupIds) || [];
+  const followById = Object.fromEntries(D.followups.map(c => [c.id, c]));
+  const followIds = orderedIds(
+    todayPicks.length ? todayPicks.filter(id => followById[id]) : D.followups.map(c => c.id).slice(0, 5),
+    state.orders.followups
+  ).filter(id => !state.dismissed[id]);
+  const visibleF = followIds;
+
+  const totalQueueOpen = (plateIds.filter(i => !state.done[i]).length
+    + overdueIds.filter(i => !state.done[i]).length
+    + slackIds.filter(i => !state.done[i]).length);
+
+  return (
+    <div className="m1">
+      <PulseCard />
+
+      <CollapsibleBlock title="Day stream" sub="schedule" color="schedule"
+        defaultOpen={false}
+        count={D.today_calendar.length}>
+        <DayStream calTab={calTab} onTab={setCalTab} notes={cardProps.notes || state.notes} onNote={cardProps.onNote} notesTs={state.notesTs} />
+      </CollapsibleBlock>
+
+      <CollapsibleBlock title="Queue" color="queue"
+        defaultOpen={true}
+        count={totalQueueOpen}>
+        <div className="m1-toolbar">
+          <div className="m-subtabs">
+            {Object.entries(queues).map(([id, q]) => (
+              <button key={id}
+                className={`m-subtab ${qTab === id ? 'is-active' : ''}`}
+                onClick={() => { setQTab(id); setQMore(false); }}>
+                <span>{q.label}</span>
+                <span className="m-subtab__count">{q.ids.filter(i => !state.done[i]).length}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="m-queuelist">
+          {aq.ids.length === 0 ? (
+            qTab === 'slack'
+              ? <window.EmptyState tool="slack" valueProp="Surface threads where you're awaited across your channels, DMs, and @mentions." allClearText="Inbox zero across your channels. Nice." />
+              : <div className="m-empty">Inbox zero. Nice.</div>
+          ) : (
+            <window.DraggableList
+              ids={visibleQ}
+              onReorder={onReorder(aq.key)}
+              renderItem={(id) => (
+                <CardLite
+                  card={aq.by[id]}
+                  done={state.done[id]}
+                  onCheck={cardProps.onCheck}
+                  note={(cardProps.notes || state.notes || {})[id]}
+                  onNote={cardProps.onNote}
+                  noteTs={(state.notesTs || {})[id]}
+                />
+              )}
+            />
+          )}
+        </div>
+        {aq.ids.length > 4 && (
+          <ViewMore count={aq.ids.length - 4} expanded={qMore} onClick={() => setQMore(!qMore)} />
+        )}
+      </CollapsibleBlock>
+
+      <CollapsibleBlock title="Today's follow-ups" color="follow"
+        sub={`${followIds.length ? "Today's picks for focus — full triage on Follow-Ups tab" : "Nothing surfaced — open Follow-Ups for the full list"}`}
+        defaultOpen={true}
+        count={followIds.filter(i => !state.done[i]).length}>
+        <div className="m-followlist">
+          {visibleF.map(id => (
+            <FollowupRow
+              key={id}
+              item={followById[id]}
+              isDone={!!state.done[id]}
+              onCheck={() => cardProps.onCheck(id)}
+              isOpen={openF === id}
+              onToggle={() => setOpenF(openF === id ? null : id)}
+              note={(cardProps.notes || state.notes || {})[id]}
+              onNote={cardProps.onNote}
+              noteTs={(state.notesTs || {})[id]}
+            />
+          ))}
+        </div>
+      </CollapsibleBlock>
+
+      <CollapsibleBlock title="Lifecycle OS — this week" color="board"
+        defaultOpen={false}
+        sub="drag cards · click to expand">
+        <LifecycleBoard state={state} setState={setState} />
+      </CollapsibleBlock>
+    </div>
+  );
+}
+
+Object.assign(window, { TodayMockup1, CardLite, FollowupRow, CardNote });
+
+</script>
+
+<!-- ===== inlined: pages.jsx (StratPageB stripped) ===== -->
+<script type="text/babel">
+/* global React, DAILY_DASH_DATA, Badge */
+const D = window.DAILY_DASH_DATA;
+const { useState: useS, useMemo: useM } = React;
+
+// ============================================================
+// EXTRA CSS
+// ============================================================
+(function injectStyles() {
+  if (document.getElementById('dash-pages-styles')) return;
+  const css = `
+  /* Page stack — gives consistent gaps between top-level sections */
+  .pg-stack > * + * { margin-top: 18px; }
+
+  /* Variant tabs */
+  .pg-variants { display:flex; gap:6px; padding:6px; background:color-mix(in oklab, var(--ink) 5%, var(--bg)); border:1px solid var(--hairline-soft); border-radius:8px; margin-bottom:24px; max-width:340px; }
+  .pg-variants__btn { flex:1; padding:8px 14px; border:0; background:transparent; cursor:pointer; font-family:var(--display); font-size:13px; color:var(--ink-muted); border-radius:6px; transition:all 0.15s; }
+  .pg-variants__btn:hover { color:var(--ink-2); }
+  .pg-variants__btn.is-active { background:var(--surface); color:var(--ink); box-shadow:0 1px 2px rgba(0,0,0,0.06); font-weight:500; }
+  .pg-variants__hint { padding:8px 10px; font-size:10.5px; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.14em; align-self:center; }
+
+  /* Week banner */
+  .wk-banner { background:var(--surface); border:1px solid var(--hairline); border-radius:14px; padding:22px 28px; display:grid; grid-template-columns:auto 1fr; gap:32px; align-items:center; }
+  .wk-banner__range-eyebrow { font-size:10px; text-transform:uppercase; letter-spacing:0.22em; color:var(--terracotta); font-weight:600; margin-bottom:4px; }
+  .wk-banner__range { font-family:var(--display); font-size:32px; font-weight:300; line-height:1; color:var(--ink); }
+  .wk-banner__range-sub { font-size:12px; color:var(--ink-muted); margin-top:6px; font-style:italic; }
+  .wk-banner__metrics { display:grid; grid-template-columns:repeat(4, 1fr); border-left:1px solid var(--hairline-soft); padding-left:32px; gap:0; }
+  .wk-banner__metrics .m-metric { padding-right:16px; }
+  .wk-banner__metrics .m-metric + .m-metric { border-left:1px solid var(--hairline-soft); padding-left:16px; }
+
+  /* Day strip */
+  .wk-days { display:grid; grid-template-columns:repeat(5, 1fr); gap:10px; }
+  .wk-day { background:var(--surface); border:1px solid var(--hairline-soft); border-radius:12px; padding:14px 14px 12px; cursor:pointer; transition:all 0.15s; text-align:left; }
+  .wk-day:hover { border-color:var(--terracotta); transform:translateY(-1px); }
+  .wk-day.is-today { background:color-mix(in oklab, var(--terracotta) 7%, var(--surface)); border-color:color-mix(in oklab, var(--terracotta) 30%, var(--hairline)); }
+  .wk-day.is-open { background:color-mix(in oklab, var(--terracotta) 10%, var(--surface)); border-color:var(--terracotta); box-shadow:0 4px 14px -8px rgba(0,0,0,0.18); }
+  .wk-day__head { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:8px; }
+  .wk-day__name { font-size:10px; text-transform:uppercase; letter-spacing:0.18em; color:var(--ink-muted); font-weight:600; }
+  .wk-day__num { font-family:var(--display); font-size:22px; font-weight:300; color:var(--ink); }
+  .wk-day__count { font-family:var(--mono); font-size:10px; color:var(--ink-muted); }
+  .wk-day__items { font-size:11.5px; color:var(--ink-2); line-height:1.45; }
+  .wk-day__items > div { padding:3px 0; border-top:1px dashed var(--hairline-soft); }
+  .wk-day__items > div:first-child { border-top:0; }
+
+  /* Day expanded panel — appears below the day strip */
+  .wk-dayexpand {
+    background:var(--surface); border:1px solid var(--terracotta); border-radius:12px;
+    overflow:hidden; animation:detail-in 0.2s ease-out;
+  }
+  .wk-dayexpand__head {
+    padding:14px 22px; display:flex; align-items:baseline; justify-content:space-between;
+    border-bottom:1px solid var(--hairline-soft);
+    background:color-mix(in oklab, var(--terracotta) 5%, var(--surface));
+  }
+  .wk-dayexpand__h { font-family:var(--display); font-size:18px; font-weight:500; color:var(--ink); }
+  .wk-dayexpand__sub { font-size:11px; text-transform:uppercase; letter-spacing:0.14em; color:var(--ink-muted); }
+  .wk-dayexpand__close { font-family:var(--mono); font-size:18px; color:var(--ink-muted); padding:4px 8px; line-height:1; }
+  .wk-dayexpand__close:hover { color:var(--terracotta); }
+
+  /* Generic expandable row used across multiple sections */
+  .xrow { border-top:1px solid var(--hairline-soft); }
+  .xrow:first-of-type { border-top:0; }
+  .xrow__head {
+    width:100%; display:grid; align-items:start; gap:12px;
+    padding:12px 18px; cursor:pointer; text-align:left; background:none; border:0;
+    font-family:inherit; color:inherit;
+    transition:background 0.12s;
+  }
+  .xrow__head:hover { background:rgba(0,0,0,0.025); }
+  .xrow.is-open .xrow__head { background:color-mix(in oklab, var(--terracotta) 5%, var(--surface)); }
+
+  /* Variants of xrow grid */
+  .xrow--day .xrow__head      { grid-template-columns:auto 1fr auto auto; }
+  .xrow--p0 .xrow__head       { grid-template-columns:18px auto 1fr auto auto; }
+  .xrow--planning .xrow__head { grid-template-columns:18px 80px 1fr auto auto; }
+  .xrow--follow .xrow__head   { grid-template-columns:18px 80px 1fr auto auto; }
+
+  .xrow__check {
+    width:18px; height:18px; border:1px solid var(--hairline);
+    border-radius:50%; display:inline-flex; align-items:center; justify-content:center;
+    color:transparent; transition:all 0.15s; margin-top:2px;
+    background:transparent; cursor:pointer; padding:0;
+  }
+  .xrow__check:hover { border-color:var(--terracotta); }
+  .xrow__check.is-done { background:var(--terracotta); border-color:var(--terracotta); color:#fff; }
+
+  .xrow__dot { width:8px; height:8px; border-radius:50%; margin-top:7px; background:var(--ink-faint); }
+  .xrow--p0 .xrow__dot { background:var(--terracotta); box-shadow:0 0 0 3px color-mix(in oklab, var(--terracotta) 18%, transparent); }
+
+  .xrow__when {
+    font-family:var(--mono); font-size:10.5px; color:var(--ink-muted);
+    font-variant-numeric:tabular-nums; padding-top:3px; text-transform:uppercase; letter-spacing:0.06em;
+  }
+  .xrow.is-overdue .xrow__when { color:var(--terracotta); font-weight:500; }
+
+  .xrow__title {
+    font-family:var(--display); font-size:14px; font-weight:500; color:var(--ink); line-height:1.35;
+  }
+  .xrow.is-done .xrow__title { text-decoration:line-through; color:var(--ink-muted); }
+  .xrow__sub-inline {
+    font-size:11.5px; color:var(--ink-muted); line-height:1.5; margin-top:3px;
+  }
+  .xrow__badges { display:flex; flex-wrap:wrap; gap:4px; justify-content:flex-end; max-width:200px; padding-top:2px; }
+  .xrow__chev {
+    font-family:var(--mono); font-size:14px; color:var(--ink-faint); width:14px; text-align:center;
+    padding-top:3px;
+  }
+  .xrow.is-open .xrow__chev { color:var(--terracotta); transform:rotate(90deg); }
+
+  .xrow__detail {
+    padding:4px 22px 18px 22px;
+    background:color-mix(in oklab, var(--terracotta) 4%, var(--surface));
+    animation:detail-in 0.18s ease-out;
+  }
+  .xrow__detail-h {
+    font-size:9.5px; text-transform:uppercase; letter-spacing:0.18em;
+    color:var(--terracotta); font-weight:600; margin:10px 0 4px;
+  }
+  .xrow__detail-h:first-child { margin-top:0; }
+  .xrow__detail-body { font-size:12.5px; line-height:1.55; color:var(--ink-2); font-weight:300; text-wrap:pretty; margin:0; }
+  .xrow__actions { display:flex; gap:6px; flex-wrap:wrap; margin-top:12px; }
+
+  /* Scrollable card body */
+  .scroll-body { max-height:380px; overflow-y:auto; scrollbar-width:thin; scrollbar-color:var(--hairline) transparent; }
+  .scroll-body::-webkit-scrollbar { width:6px; }
+  .scroll-body::-webkit-scrollbar-thumb { background:var(--hairline); border-radius:3px; }
+  .scroll-body::-webkit-scrollbar-track { background:transparent; }
+
+  /* Pull body padding back into the rows when xrow is used */
+  .m1-block__body--rows { padding:0; }
+  .m1-block__body--rows.scroll-body { padding-right:0; }
+
+  /* Two-col grid */
+  .pg-2col { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+  .pg-2col > * { min-width:0; }
+  @media (max-width:900px) { .pg-2col { grid-template-columns:1fr; } }
+
+  /* Shipped filters + list */
+  .sh-toolbar {
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:0 18px 14px; flex-wrap:wrap;
+  }
+  .sh-filters { display:inline-flex; gap:2px; background:rgba(0,0,0,0.05); border-radius:6px; padding:3px; }
+  .sh-filter {
+    padding:5px 12px; border-radius:4px; font-size:11.5px; font-weight:500; color:var(--ink-muted);
+    transition:all 0.15s; display:inline-flex; align-items:center; gap:6px;
+  }
+  .sh-filter:hover { color:var(--ink-2); }
+  .sh-filter.is-active { background:var(--surface); color:var(--ink); box-shadow:0 1px 2px rgba(0,0,0,0.04); }
+  .sh-filter__count { font-family:var(--mono); font-size:9.5px; padding:1px 6px; border-radius:999px; background:rgba(0,0,0,0.06); color:var(--ink-muted); }
+  .sh-filter.is-active .sh-filter__count { background:var(--bg-deep); color:var(--ink-2); }
+
+  .sh-list { display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:0 18px 18px; }
+  @media (max-width:900px) { .sh-list { grid-template-columns:1fr; } }
+  .sh-item {
+    display:grid; grid-template-columns:18px 1fr auto; gap:10px; align-items:start;
+    padding:10px 14px; background:rgba(255,255,255,0.55); border:1px solid var(--hairline-soft);
+    border-radius:6px; font-size:12.5px; color:var(--ink-2); text-decoration:none;
+    transition:all 0.12s;
+  }
+  .sh-item:hover { background:#fff; border-color:var(--sage); transform:translateY(-1px); }
+  .sh-item__check {
+    width:14px; height:14px; border-radius:50%; background:var(--sage); color:#fff;
+    display:inline-flex; align-items:center; justify-content:center; margin-top:2px;
+    font-size:9px; line-height:1;
+  }
+  .sh-item__title { font-family:var(--display); font-size:13.5px; font-weight:500; color:var(--ink); margin-bottom:2px; }
+  .sh-item__meta { font-size:11px; color:var(--ink-muted); }
+  .sh-item__tag { font-family:var(--mono); font-size:9.5px; padding:2px 6px; border-radius:3px; text-transform:uppercase; letter-spacing:0.1em; align-self:flex-start; }
+  .sh-item__tag--important { background:color-mix(in oklab, var(--persimmon) 22%, transparent); color:var(--persimmon); }
+  .sh-item__tag--os { background:color-mix(in oklab, var(--sage) 22%, transparent); color:var(--sage); }
+
+  /* Followup buckets */
+  .fu-bucket { background:var(--surface); border:1px solid var(--hairline-soft); border-radius:12px; overflow:hidden; }
+  .fu-bucket--urgent { background:color-mix(in oklab, var(--terracotta) 7%, var(--surface)); border-color:color-mix(in oklab, var(--terracotta) 22%, var(--hairline)); }
+  .fu-bucket--soon   { background:color-mix(in oklab, var(--mustard) 7%, var(--surface));   border-color:color-mix(in oklab, var(--mustard) 22%, var(--hairline)); }
+  .fu-bucket--later  { background:color-mix(in oklab, var(--sage) 6%, var(--surface));     border-color:color-mix(in oklab, var(--sage) 18%, var(--hairline)); }
+  .fu-bucket__head {
+    width:100%; display:flex; align-items:baseline; justify-content:space-between;
+    padding:14px 18px; border-bottom:1px solid var(--hairline-soft); cursor:pointer;
+    background:none; border-left:0; border-right:0; border-top:0; text-align:left;
+    font-family:inherit; color:inherit;
+  }
+  .fu-bucket__head h3 { font-family:var(--display); font-size:15px; font-weight:500; margin:0; color:var(--ink); }
+  .fu-bucket__head-r { display:flex; align-items:center; gap:10px; }
+  .fu-bucket__count { font-family:var(--mono); font-size:11px; color:var(--ink-muted); padding:2px 8px; background:rgba(255,255,255,0.5); border-radius:999px; }
+  .fu-bucket__chev { font-family:var(--mono); font-size:18px; color:var(--ink-muted); width:18px; text-align:center; line-height:1; }
+  .fu-bucket.is-collapsed .fu-bucket__head { border-bottom:0; }
+
+  /* P0 & xrow-style colored borders for urgency in followups */
+  .xrow--follow.is-urgent .xrow__head { background:color-mix(in oklab, var(--terracotta) 4%, transparent); }
+
+  /* Q2 north star */
+  .q2-northstar { background:linear-gradient(135deg, color-mix(in oklab, var(--terracotta) 9%, var(--surface)), color-mix(in oklab, var(--persimmon) 6%, var(--surface))); border:1px solid color-mix(in oklab, var(--terracotta) 22%, var(--hairline)); border-radius:14px; padding:28px 32px; }
+  .q2-northstar__eye { font-size:10px; text-transform:uppercase; letter-spacing:0.22em; color:var(--terracotta); font-weight:600; margin-bottom:8px; }
+  .q2-northstar__h { font-family:var(--display); font-size:30px; font-weight:300; line-height:1.15; color:var(--ink); margin-bottom:14px; }
+  .q2-northstar__body { font-size:13.5px; color:var(--ink-2); line-height:1.6; max-width:760px; }
+
+  /* Q2 glance grid — items are clickable */
+  .q2-glance { display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; }
+  .q2-glance__col { background:var(--surface); border:1px solid var(--hairline-soft); border-radius:12px; overflow:hidden; }
+  .q2-glance__col--sage      { background:color-mix(in oklab, var(--sage) 8%, var(--surface));      border-color:color-mix(in oklab, var(--sage) 22%, var(--hairline)); }
+  .q2-glance__col--persimmon { background:color-mix(in oklab, var(--persimmon) 8%, var(--surface)); border-color:color-mix(in oklab, var(--persimmon) 22%, var(--hairline)); }
+  .q2-glance__col--mustard   { background:color-mix(in oklab, var(--mustard) 8%, var(--surface));   border-color:color-mix(in oklab, var(--mustard) 22%, var(--hairline)); }
+  .q2-glance__col--terracotta{ background:color-mix(in oklab, var(--terracotta) 8%, var(--surface)); border-color:color-mix(in oklab, var(--terracotta) 22%, var(--hairline)); }
+  .q2-glance__head { padding:12px 14px; display:flex; align-items:center; justify-content:space-between; }
+  .q2-glance__label { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.16em; color:var(--ink-2); }
+  .q2-glance__count { font-family:var(--mono); font-size:11px; color:var(--ink-muted); }
+  .q2-glance__items { padding:0 8px 10px; display:flex; flex-direction:column; gap:2px; }
+  .q2-glance__item {
+    display:block; width:100%; text-align:left; background:none; border:0;
+    padding:8px 10px; font-size:12px; color:var(--ink-2); line-height:1.5;
+    border-radius:5px; cursor:pointer; transition:all 0.12s; font-family:inherit;
+  }
+  .q2-glance__item:hover { background:rgba(255,255,255,0.65); color:var(--ink); }
+  .q2-glance__item.is-open { background:rgba(255,255,255,0.85); color:var(--ink); box-shadow:inset 0 0 0 1px var(--hairline-soft); }
+  .q2-glance__detail {
+    padding:8px 10px 10px; background:rgba(255,255,255,0.85);
+    border-radius:5px; margin:2px 0;
+    animation:detail-in 0.18s ease-out;
+  }
+  .q2-glance__detail-actions { display:flex; flex-direction:column; gap:4px; }
+  .q2-glance__detail-actions .cta { justify-content:center; font-size:11px; padding:5px 10px; }
+  @media (max-width:900px) { .q2-glance { grid-template-columns:1fr 1fr; } }
+
+  /* Wins gallery (legacy grid — retained for any caller using .q2-wins without --rows) */
+  .q2-wins { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .q2-win { background:var(--surface); border:1px solid var(--hairline-soft); border-radius:12px; padding:18px 20px; }
+  .q2-win__title { font-family:var(--display); font-size:16px; font-weight:500; color:var(--ink); margin-bottom:8px; line-height:1.3; }
+  .q2-win__body { font-size:12.5px; color:var(--ink-2); line-height:1.6; margin-bottom:12px; text-wrap:pretty; }
+  @media (max-width:900px) { .q2-wins { grid-template-columns:1fr; } }
+
+  /* Wins row layout — 3-col toggle rows, click to expand body + CTA */
+  .q2-wins--rows { display:flex; flex-direction:column; gap:0; padding:6px 8px; }
+  .q2-winrow { border-bottom:1px solid var(--hairline-soft); }
+  .q2-winrow:last-child { border-bottom:0; }
+  .q2-winrow__head {
+    display:grid; grid-template-columns: 1fr 140px 110px 22px; gap:14px;
+    width:100%; align-items:center; text-align:left;
+    padding:11px 14px; background:transparent; border:0; cursor:pointer;
+    font:inherit; color:inherit;
+  }
+  .q2-winrow__head:hover { background:rgba(0,0,0,0.025); }
+  .q2-winrow.is-open .q2-winrow__head { background:rgba(0,0,0,0.04); }
+  .q2-winrow__title { font-size:13.5px; color:var(--ink); font-weight:500; line-height:1.35; }
+  .q2-winrow__pod { font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--ink-muted); }
+  .q2-winrow__date { font-family:var(--mono); font-size:11px; color:var(--ink-muted); font-variant-numeric:tabular-nums; }
+  .q2-winrow__chev { font-family:var(--mono); font-size:14px; color:var(--ink-muted); text-align:center; }
+  .q2-winrow--head {
+    display:grid; grid-template-columns: 1fr 140px 110px 22px; gap:14px;
+    align-items:center; padding:11px 14px 8px;
+    border-bottom:1px solid var(--hairline-soft);
+  }
+  .q2-winrow--head .q2-winrow__title,
+  .q2-winrow--head .q2-winrow__pod,
+  .q2-winrow--head .q2-winrow__date {
+    font-size:10px; text-transform:uppercase; letter-spacing:0.14em; color:var(--ink-faint, var(--ink-muted)); font-weight:500;
+  }
+  @media (max-width:700px) {
+    .q2-winrow--head { grid-template-columns: 1fr 80px 80px 22px; gap:10px; }
+  }
+  .q2-winrow__detail { padding:0 14px 14px 14px; border-top:1px solid var(--hairline-soft); background:var(--bg-tint); }
+  .q2-winrow__body { font-size:12.5px; color:var(--ink-2); line-height:1.6; margin:10px 0 12px 0; text-wrap:pretty; }
+  .q2-winrow__actions { display:flex; gap:8px; flex-wrap:wrap; }
+  @media (max-width:700px) {
+    .q2-winrow__head { grid-template-columns: 1fr 80px 80px 22px; gap:10px; }
+  }
+
+  /* Role panel */
+  .q2-role { background:color-mix(in oklab, var(--plum) 6%, var(--surface)); border:1px solid color-mix(in oklab, var(--plum) 22%, var(--hairline)); border-radius:12px; padding:18px 22px; }
+  .q2-role__title { font-family:var(--display); font-size:18px; font-weight:500; color:var(--ink); margin-bottom:2px; }
+  .q2-role__meta { font-size:11px; text-transform:uppercase; letter-spacing:0.14em; color:var(--ink-muted); margin-bottom:10px; }
+  .q2-role__detail { font-size:12.5px; color:var(--ink-2); line-height:1.6; margin-bottom:14px; }
+  .q2-skills { display:grid; grid-template-columns:repeat(4, 1fr); gap:10px; }
+  .q2-skill__h { font-size:10px; text-transform:uppercase; letter-spacing:0.16em; color:var(--terracotta); font-weight:600; margin-bottom:4px; }
+  .q2-skill__body { font-size:12px; color:var(--ink-2); line-height:1.5; }
+  @media (max-width:900px) { .q2-skills { grid-template-columns:1fr 1fr; } }
+
+  /* EmptyState — Connect <Tool> + All clear cards */
+  .empty-state {
+    border:1px dashed var(--hairline);
+    border-radius:12px;
+    padding:18px 22px;
+    background:color-mix(in oklab, var(--surface) 96%, transparent);
+    margin:8px 0;
+  }
+  .empty-state--connect { border-color:color-mix(in oklab, var(--terracotta) 35%, var(--hairline)); background:color-mix(in oklab, var(--terracotta) 4%, var(--surface)); }
+  .empty-state__h { font-family:var(--display); font-size:14px; font-weight:500; color:var(--ink); margin-bottom:4px; }
+  .empty-state__body { font-size:12.5px; color:var(--ink-2); line-height:1.55; margin:0; }
+  .empty-state__hint { font-size:11px; color:var(--ink-muted); line-height:1.5; margin:6px 0 0; }
+  .empty-state__hint code { font-family:var(--mono); font-size:11px; padding:1px 5px; border-radius:3px; background:color-mix(in oklab, var(--ink) 6%, transparent); }
+
+  /* Smart-layer tags */
+  .conf-tag { font-family:var(--mono); font-size:9.5px; letter-spacing:0.12em; text-transform:uppercase; padding:2px 6px; border-radius:3px; margin-left:6px; vertical-align:middle; }
+  .conf-tag--high { background:color-mix(in oklab, var(--sage) 18%, transparent); color:var(--sage); }
+  .conf-tag--med  { background:color-mix(in oklab, var(--mustard) 22%, transparent); color:var(--mustard); }
+  .conf-tag--low  { background:color-mix(in oklab, var(--ink-muted) 18%, transparent); color:var(--ink-muted); }
+
+  .status-change { display:inline-flex; align-items:center; gap:4px; font-family:var(--mono); font-size:10px; padding:2px 8px; border-radius:4px; background:color-mix(in oklab, var(--plum) 12%, transparent); color:var(--plum); margin-left:6px; }
+  .status-change__prev { text-decoration:line-through; opacity:0.7; }
+  .status-change__arrow { opacity:0.6; }
+  .status-change__now { font-weight:600; }
+
+  .moment-marker { display:inline-block; font-family:var(--mono); font-size:9.5px; letter-spacing:0.14em; text-transform:uppercase; padding:2px 7px; border-radius:3px; background:color-mix(in oklab, var(--sage) 14%, transparent); color:var(--sage); margin-left:6px; cursor:help; }
+
+  /* Personal hero */
+  .pp-hero { background:linear-gradient(135deg, color-mix(in oklab, var(--sage) 9%, var(--surface)), color-mix(in oklab, var(--mustard) 6%, var(--surface))); border:1px solid color-mix(in oklab, var(--sage) 22%, var(--hairline)); border-radius:14px; padding:24px 28px; }
+  .pp-hero__eye { font-size:10px; text-transform:uppercase; letter-spacing:0.22em; color:var(--sage); font-weight:600; margin-bottom:6px; }
+  .pp-hero__h { font-family:var(--display); font-size:24px; font-weight:400; color:var(--ink); margin-bottom:10px; }
+  .pp-hero__row { display:grid; grid-template-columns:96px 1fr; gap:14px; padding:10px 0; border-top:1px solid color-mix(in oklab, var(--sage) 18%, var(--hairline-soft)); font-size:12.5px; color:var(--ink-2); line-height:1.55; }
+  .pp-hero__row-label { font-size:10px; text-transform:uppercase; letter-spacing:0.16em; color:var(--ink-muted); font-weight:600; padding-top:2px; }
+  .pp-hero__links { padding-top:14px; display:flex; gap:8px; }
+
+  .pp-step { display:grid; grid-template-columns:auto auto 1fr auto; gap:14px; align-items:start; padding:14px 18px; border-bottom:1px solid var(--hairline-soft); }
+  .pp-step:last-child { border-bottom:0; }
+  .pp-step__when { font-family:var(--mono); font-size:10px; color:var(--ink-muted); text-transform:uppercase; letter-spacing:0.1em; padding-top:5px; min-width:90px; }
+  .pp-step__title { font-family:var(--display); font-size:14px; font-weight:500; color:var(--ink); margin-bottom:4px; }
+  .pp-step__sub { font-size:12px; color:var(--ink-muted); line-height:1.55; }
+
+  .pp-mini { background:var(--surface); border:1px solid var(--hairline-soft); border-radius:12px; padding:16px 18px; }
+  .pp-mini__h { font-family:var(--display); font-size:14px; font-weight:500; color:var(--ink); margin-bottom:4px; }
+  .pp-mini__meta { font-size:10px; text-transform:uppercase; letter-spacing:0.14em; color:var(--ink-muted); margin-bottom:8px; }
+  .pp-mini__body { font-size:12.5px; color:var(--ink-2); line-height:1.6; text-wrap:pretty; }
+
+  .pp-projects { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  @media (max-width:700px) { .pp-projects { grid-template-columns:1fr; } }
+  `;
+  const tag = document.createElement('style');
+  tag.id = 'dash-pages-styles';
+  tag.textContent = css;
+  document.head.appendChild(tag);
+})();
+
+// shared block
+function Block({ title, sub, color, count, defaultOpen = true, scroll = false, bodyClass = '', children }) {
+  const [open, setOpen] = useS(!!defaultOpen);
+  const cls = `m1-block__body ${bodyClass} ${scroll ? 'scroll-body' : ''}`.trim();
+  return (
+    <section className={`m1-block m1-block--${color} ${open ? 'is-open' : 'is-closed'}`}>
+      <button className="m1-block__head" onClick={() => setOpen(!open)}>
+        <div className="m1-block__head-l">
+          <h2>{title}</h2>
+          {count != null && <span className="m1-block__count">{count}</span>}
+        </div>
+        <div className="m1-block__head-r">
+          {sub && <span className="m1-block__sub">{sub}</span>}
+          <span className="m1-block__chev">{open ? '–' : '+'}</span>
+        </div>
+      </button>
+      {open && <div className={cls}>{children}</div>}
+    </section>
+  );
+}
+
+// ============================================================
+// Generic Expandable Row
+// ============================================================
+function ExpandRow({ kind, columns, isOpen, onToggle, children, detail, className = '' }) {
+  return (
+    <div className={`xrow xrow--${kind} ${isOpen ? 'is-open' : ''} ${className}`}>
+      <button className="xrow__head" onClick={onToggle}>
+        {columns}
+      </button>
+      {isOpen && <div className="xrow__detail">{detail}</div>}
+    </div>
+  );
+}
+
+// ============================================================
+// THIS WEEK PAGE (finalized)
+// ============================================================
+
+// Day-item details — keyed by day, each item has full detail
+const DAY_ITEMS = {
+  // Populated by /daily-dash refresh from connected MCPs (Calendar events + work-items per day).
+  // Leave empty — empty arrays render an empty-state row per day.
+  mon: [],
+  tue: [],
+  wed: [],
+  thu: [],
+  fri: [],
+};
+
+const DAY_KIND_LABELS = {
+  'work-item': 'Work-item',
+  'follow-up': 'Follow-up',
+  'meeting':   'Meeting',
+  'launch':    'Launch',
+};
+const DAY_KIND_TONES = {
+  'work-item': 'persimmon',
+  'follow-up': 'mustard',
+  'meeting':   'sage',
+  'launch':    'terracotta',
+};
+
+const DAYS = D.meta.weekDays;
+
+// Shipped tag map — categorises shipped items for filtering
+const SHIPPED_TAGS = {
+  // Populated by /daily-dash refresh. Maps shipped-item id → tag ('important' | 'os' | …).
+};
+
+function DayItemRow({ item, isOpen, onToggle, isDone, onCheck }) {
+  const kindLabel = item.kind ? DAY_KIND_LABELS[item.kind] : null;
+  const kindTone  = item.kind ? DAY_KIND_TONES[item.kind] : null;
+  return (
+    <div className={`xrow xrow--day ${isOpen ? 'is-open' : ''} ${isDone ? 'is-done' : ''}`}>
+      <button className="xrow__head" onClick={onToggle}>
+        <button className={`xrow__check ${isDone ? 'is-done' : ''}`} onClick={(e) => { e.stopPropagation(); onCheck(); }}>
+          {isDone && <svg width="10" height="10" viewBox="0 0 11 11"><path d="M2 5.5L4.5 8L9 3" stroke="currentColor" strokeWidth="1.6" fill="none" strokeLinecap="round"/></svg>}
+        </button>
+        <div>
+          {kindLabel && (
+            <div style={{fontFamily:'var(--mono)', fontSize:9, letterSpacing:'0.14em', textTransform:'uppercase', color:`var(--${kindTone})`, marginBottom:3}}>
+              {kindLabel}
+            </div>
+          )}
+          <div className="xrow__title">{item.title}</div>
+          {item.sub && <div className="xrow__sub-inline">{item.sub}</div>}
+        </div>
+        <div style={{display:'flex', gap:6, alignItems:'center'}}>
+          <span className="badge" style={{background:`color-mix(in oklab, var(--${item.tone}) 18%, transparent)`, color:`var(--${item.tone})`}}>{item.when}</span>
+        </div>
+        <span className="xrow__chev">›</span>
+      </button>
+      {isOpen && (
+        <div className="xrow__detail">
+          <div className="xrow__detail-h">Detail</div>
+          <p className="xrow__detail-body">{item.detail}</p>
+          {item.links && item.links.length > 0 && (
+            <div className="xrow__actions">
+              {item.links.map((l, i) => (
+                <a key={i} className={`cta cta--${i === 0 ? 'primary' : 'plum'}`} href={l.href}>{l.label} ↗</a>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function P0Row({ item, isOpen, onToggle, isDone, onCheck, note, onNote, noteTs }) {
+  return (
+    <div className={`xrow xrow--p0 ${isOpen ? 'is-open' : ''} ${isDone ? 'is-done' : ''}`}>
+      <button className="xrow__head" onClick={onToggle}>
+        <button className={`xrow__check ${isDone ? 'is-done' : ''}`} onClick={(e) => { e.stopPropagation(); onCheck(); }}>
+          {isDone && <svg width="10" height="10" viewBox="0 0 11 11"><path d="M2 5.5L4.5 8L9 3" stroke="currentColor" strokeWidth="1.6" fill="none" strokeLinecap="round"/></svg>}
+        </button>
+        <span className="xrow__dot" />
+        <div>
+          <div className="xrow__title">{item.title}</div>
+          <div className="xrow__sub-inline">{item.sub}</div>
+        </div>
+        <div className="xrow__badges">{(item.badges || []).map((b, i) => <Badge key={i} {...b} />)}</div>
+        <span className="xrow__chev">›</span>
+      </button>
+      {isOpen && (
+        <div className="xrow__detail">
+          <div className="xrow__detail-h">What this needs</div>
+          <p className="xrow__detail-body">{item.sub}</p>
+          <div className="xrow__actions">
+            {(item.links || []).map((l, i) => (
+              <a key={i} className={`cta cta--${i === 0 ? 'primary' : 'plum'}`} href={l.href}>{l.label} ↗</a>
+            ))}
+            <button className="cta cta--ghost" onClick={(e) => { e.stopPropagation(); onCheck(); }}>{isDone ? 'Mark open' : 'Mark resolved'}</button>
+          </div>
+          {onNote && window.CardNote && <window.CardNote cardId={item.id} note={note} onNote={onNote} ts={noteTs} />}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function PlanningRow({ item, isOpen, onToggle, isDone, onCheck, note, onNote, noteTs }) {
+  return (
+    <div className={`xrow xrow--planning ${isOpen ? 'is-open' : ''} ${isDone ? 'is-done' : ''}`}>
+      <div className="xrow__head" role="button" tabIndex={0}
+        onClick={onToggle}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle && onToggle(); } }}>
+        <button type="button" className={`xrow__check ${isDone ? 'is-done' : ''}`}
+          onClick={(e) => { e.stopPropagation(); onCheck(); }}>
+          {isDone && <svg width="10" height="10" viewBox="0 0 11 11"><path d="M2 5.5L4.5 8L9 3" stroke="currentColor" strokeWidth="1.6" fill="none" strokeLinecap="round"/></svg>}
+        </button>
+        <div className="xrow__when">{item.when}</div>
+        <div>
+          <div className="xrow__title">{item.title}</div>
+        </div>
+        <div className="xrow__badges">{(item.badges || []).map((b, i) => <Badge key={i} {...b} />)}</div>
+        <span className="xrow__chev">›</span>
+      </div>
+      {isOpen && (() => {
+        const ctaLinks = Array.isArray(item.links) && item.links.length
+          ? item.links
+          : [
+              ...(item.href ? [{ kind:'notion', label:'Open in Notion', href:item.href }] : []),
+              // Fallback CTA when no links are provided. /daily-dash refresh fills item.links from Notion/Slack/Calendar.
+            ];
+        const ctaClass = (kind, i) => {
+          if (kind === 'obsidian') return 'cta--plum';
+          if (kind === 'slack') return 'cta--slack';
+          return i === 0 ? 'cta--primary' : 'cta--plum';
+        };
+        return (
+          <div className="xrow__detail">
+            <div className="xrow__detail-h">Planning · {item.when}</div>
+            <p className="xrow__detail-body">{item.sub || 'Planning ticket — open in Notion to add scope, owners and segments before the launch window.'}</p>
+            <div className="xrow__actions">
+              {ctaLinks.map((l, i) => (
+                <a key={i} className={`cta ${ctaClass(l.kind, i)}`} href={l.href} target="_blank" rel="noreferrer">{l.label} ↗</a>
+              ))}
+            </div>
+            {onNote && window.CardNote && <window.CardNote cardId={item.id} note={note} onNote={onNote} ts={noteTs} />}
+          </div>
+        );
+      })()}
+    </div>
+  );
+}
+
+function FollowupRow({ item, isOpen, onToggle, isDone, onCheck, isUrgent, note, onNote, noteTs }) {
+  return (
+    <div className={`xrow xrow--follow ${isOpen ? 'is-open' : ''} ${isDone ? 'is-done' : ''} ${isUrgent ? 'is-urgent' : ''}`}>
+      <div className="xrow__head" role="button" tabIndex={0}
+        onClick={onToggle}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onToggle && onToggle(); } }}>
+        <button type="button" className={`xrow__check ${isDone ? 'is-done' : ''}`}
+          onClick={(e) => { e.stopPropagation(); onCheck(); }}>
+          {isDone && <svg width="10" height="10" viewBox="0 0 11 11"><path d="M2 5.5L4.5 8L9 3" stroke="currentColor" strokeWidth="1.6" fill="none" strokeLinecap="round"/></svg>}
+        </button>
+        <div className="xrow__when">{item.when}</div>
+        <div>
+          <div className="xrow__title">{item.title}</div>
+        </div>
+        <div className="xrow__badges">{(item.badges || []).map((b, i) => <Badge key={i} {...b} />)}</div>
+        <span className="xrow__chev">›</span>
+      </div>
+      {isOpen && (() => {
+        const ctaLinks = Array.isArray(item.links) && item.links.length
+          ? item.links
+          : (item.href ? [{
+              kind: item.href.startsWith('obsidian://') ? 'obsidian'
+                  : item.href.includes('slack.com') ? 'slack'
+                  : 'notion',
+              label: item.href.startsWith('obsidian://') ? 'Open in Obsidian'
+                  : item.href.includes('slack.com') ? 'Open Slack thread'
+                  : 'Open in Notion',
+              href: item.href
+            }] : []);
+        const ctaClass = (kind, i) => {
+          if (kind === 'obsidian') return 'cta--plum';
+          if (kind === 'slack') return 'cta--slack';
+          return i === 0 ? 'cta--primary' : 'cta--plum';
+        };
+        return (
+          <div className="xrow__detail">
+            <div className="xrow__detail-h">Follow-up · {item.when}</div>
+            <p className="xrow__detail-body">{item.sub || 'No linked context yet — add a CTA on the next sweep.'}</p>
+            <div className="xrow__actions">
+              {ctaLinks.map((l, i) => (
+                <a key={i} className={`cta ${ctaClass(l.kind, i)}`} href={l.href} target="_blank" rel="noreferrer">{l.label} ↗</a>
+              ))}
+              <button className="cta cta--ghost" onClick={(e) => { e.stopPropagation(); onCheck(); }}>{isDone ? 'Reopen' : 'Mark complete'}</button>
+            </div>
+            {onNote && window.CardNote && <window.CardNote cardId={item.id} note={note} onNote={onNote} ts={noteTs} />}
+          </div>
+        );
+      })()}
+    </div>
+  );
+}
+
+function FollowupBucket({ tone, label, items, state, onCheck, onNote, openId, setOpenId, collapsible = false, defaultOpen = true }) {
+  const [bucketOpen, setBucketOpen] = useS(defaultOpen);
+  const headOnly = collapsible && !bucketOpen;
+  return (
+    <div className={`fu-bucket fu-bucket--${tone} ${headOnly ? 'is-collapsed' : ''}`}>
+      <button className="fu-bucket__head" onClick={() => collapsible ? setBucketOpen(o => !o) : null} style={{cursor: collapsible ? 'pointer' : 'default'}}>
+        <h3>{label}</h3>
+        <div className="fu-bucket__head-r">
+          <span className="fu-bucket__count">{items.length}</span>
+          {collapsible && <span className="fu-bucket__chev">{bucketOpen ? '–' : '+'}</span>}
+        </div>
+      </button>
+      {!headOnly && (
+        <div className="scroll-body" style={{padding:'4px 0'}}>
+          {items.length === 0 && (
+            <div style={{padding:'16px', textAlign:'center', fontSize:12, color:'var(--ink-muted)', fontStyle:'italic'}}>none</div>
+          )}
+          {items.map(it => (
+            <FollowupRow
+              key={it.id}
+              item={it}
+              isOpen={openId === it.id}
+              onToggle={() => setOpenId(openId === it.id ? null : it.id)}
+              isDone={!!state.done[it.id]}
+              onCheck={() => onCheck(it.id)}
+              isUrgent={tone === 'urgent'}
+              note={(state.notes || {})[it.id]}
+              onNote={onNote}
+              noteTs={(state.notesTs || {})[it.id]}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ShippedThisWeek() {
+  const [filter, setFilter] = useS('all');
+  // Filter by shipped_date in current week (meta.weekStart .. meta.weekEnd inclusive).
+  // Items missing shipped_date fall through to "earlier" and are excluded by default.
+  const ws = D.meta.weekStart, we = D.meta.weekEnd;
+  const inThisWeek = (d) => d && d >= ws && d <= we;
+  const items = D.shipped.filter(i => inThisWeek(i.shipped_date));
+  const earlierCount = D.shipped.length - items.length;
+  const counts = {
+    all: items.length,
+    important: items.filter(i => SHIPPED_TAGS[i.id] === 'important').length,
+    os: items.filter(i => SHIPPED_TAGS[i.id] === 'os').length,
+  };
+  const visible = filter === 'all' ? items : items.filter(i => SHIPPED_TAGS[i.id] === filter);
+  return (
+    <Block title="Shipped this week" sub={`${items.length} this week · ${earlierCount} earlier (Q2 page)`} color="schedule" count={items.length} bodyClass="m1-block__body--rows">
+      <div className="sh-toolbar" style={{paddingTop:14}}>
+        <div className="sh-filters">
+          <button className={`sh-filter ${filter === 'all' ? 'is-active' : ''}`} onClick={() => setFilter('all')}>
+            All <span className="sh-filter__count">{counts.all}</span>
+          </button>
+          <button className={`sh-filter ${filter === 'important' ? 'is-active' : ''}`} onClick={() => setFilter('important')}>
+            Important <span className="sh-filter__count">{counts.important}</span>
+          </button>
+          <button className={`sh-filter ${filter === 'os' ? 'is-active' : ''}`} onClick={() => setFilter('os')}>
+            Lifecycle OS tickets <span className="sh-filter__count">{counts.os}</span>
+          </button>
+        </div>
+      </div>
+      <div className="sh-list">
+        {visible.length === 0 && <div style={{padding:'14px 18px', color:'var(--ink-muted)', fontStyle:'italic'}}>Nothing shipped yet this week. Earlier ships live on the Q2 page.</div>}
+        {visible.map(item => {
+          const tag = SHIPPED_TAGS[item.id];
+          return (
+            <a key={item.id} className="sh-item" href={item.href} target={item.href.startsWith('http') ? '_blank' : undefined} rel="noreferrer">
+              <span className="sh-item__check">✓</span>
+              <div>
+                <div className="sh-item__title">{item.title}</div>
+                <div className="sh-item__meta">{item.meta}</div>
+              </div>
+              {tag && <span className={`sh-item__tag sh-item__tag--${tag}`}>{tag === 'os' ? 'OS' : 'Important'}</span>}
+            </a>
+          );
+        })}
+      </div>
+    </Block>
+  );
+}
+
+function WeekPage({ state, cardProps }) {
+  const [openDay, setOpenDay] = useS((D.meta.weekDays.find(d => d.today) || D.meta.weekDays[0]).key);
+  const [openDayItem, setOpenDayItem] = useS(null);
+  const [openP0, setOpenP0] = useS(null);
+  const [openPlan, setOpenPlan] = useS(null);
+
+  const dayItems = openDay ? (DAY_ITEMS[openDay] || []) : [];
+  const dayMeta = DAYS.find(d => d.key === openDay);
+
+  return (
+    <div className="pg-stack">
+      <section className="wk-banner">
+        <div>
+          <div className="wk-banner__range-eyebrow">Week of</div>
+          <div className="wk-banner__range">{D.meta.weekRange}</div>
+          <div className="wk-banner__range-sub">{D.meta.weekRangeSub}</div>
+        </div>
+        <div className="wk-banner__metrics">
+          <div className="m-metric m-metric--persimmon"><span className="m-metric__num">{D.launches.length}</span><span className="m-metric__label">Launching</span></div>
+          <div className="m-metric m-metric--terracotta"><span className="m-metric__num">{D.watching_p0.length}</span><span className="m-metric__label">P0 watch</span></div>
+          <div className="m-metric m-metric--mustard"><span className="m-metric__num">{D.followups.length}</span><span className="m-metric__label">Follow-ups</span></div>
+          <div className="m-metric m-metric--sage"><span className="m-metric__num">{D.shipped.length}</span><span className="m-metric__label">Shipped</span></div>
+        </div>
+      </section>
+
+      <div className="wk-days">
+        {DAYS.map(d => {
+          const items = DAY_ITEMS[d.key] || [];
+          const isOpen = openDay === d.key;
+          return (
+            <button
+              key={d.key}
+              className={`wk-day ${d.today ? 'is-today' : ''} ${isOpen ? 'is-open' : ''}`}
+              onClick={() => { setOpenDay(isOpen ? null : d.key); setOpenDayItem(null); }}
+            >
+              <div className="wk-day__head">
+                <div>
+                  <div className="wk-day__name">{d.name}</div>
+                  <div className="wk-day__num">May {d.num}</div>
+                </div>
+                <div className="wk-day__count">{items.length}</div>
+              </div>
+              <div className="wk-day__items">
+                {items.map(it => <div key={it.id}>{it.title}</div>)}
+                {items.length === 0 && <div style={{color:'var(--ink-faint)', fontStyle:'italic'}}>quiet</div>}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {openDay && dayItems.length > 0 && (
+        <div className="wk-dayexpand">
+          <div className="wk-dayexpand__head">
+            <div>
+              <div className="wk-dayexpand__sub">What's queued</div>
+              <div className="wk-dayexpand__h">{dayMeta?.name}, May {dayMeta?.num} — {dayItems.length} items</div>
+            </div>
+            <button className="wk-dayexpand__close" onClick={() => setOpenDay(null)}>×</button>
+          </div>
+          <div>
+            {dayItems.map(it => (
+              <DayItemRow
+                key={it.id}
+                item={it}
+                isOpen={openDayItem === it.id}
+                onToggle={() => setOpenDayItem(openDayItem === it.id ? null : it.id)}
+                isDone={!!state.done[it.id]}
+                onCheck={() => cardProps.onCheck(it.id)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="pg-2col">
+        <Block title="Watching — P0" sub="overdue / at-risk" color="follow" count={D.watching_p0.length} scroll bodyClass="m1-block__body--rows">
+          <div>
+            {D.watching_p0.map(c => (
+              <P0Row
+                key={c.id}
+                item={c}
+                isOpen={openP0 === c.id}
+                onToggle={() => setOpenP0(openP0 === c.id ? null : c.id)}
+                isDone={!!state.done[c.id]}
+                onCheck={() => cardProps.onCheck(c.id)}
+                note={(state.notes || {})[c.id]}
+                onNote={cardProps.onNote}
+                noteTs={(state.notesTs || {})[c.id]}
+              />
+            ))}
+          </div>
+        </Block>
+        <Block title="Planning — next 2 weeks" color="queue" count={D.planning.length} scroll bodyClass="m1-block__body--rows">
+          <div>
+            {D.planning.map(c => (
+              <PlanningRow
+                key={c.id}
+                item={c}
+                isOpen={openPlan === c.id}
+                onToggle={() => setOpenPlan(openPlan === c.id ? null : c.id)}
+                isDone={!!state.done[c.id]}
+                onCheck={() => cardProps.onCheck(c.id)}
+                note={(state.notes || {})[c.id]}
+                onNote={cardProps.onNote}
+                noteTs={(state.notesTs || {})[c.id]}
+              />
+            ))}
+          </div>
+        </Block>
+      </div>
+
+      <ShippedThisWeek />
+    </div>
+  );
+}
+
+// ============================================================
+// FOLLOW-UPS PAGE — full triage, three buckets
+// ============================================================
+function FollowupsPage({ state, cardProps }) {
+  const [openFollow, setOpenFollow] = useS(null);
+  const todayIds = new Set((D.meta && D.meta.todayFollowupIds) || []);
+  const followIds = D.followups.map(c => c.id).filter(id => !state.dismissed[id]);
+  const fBy = Object.fromEntries(D.followups.map(c => [c.id, c]));
+  const buckets = { today: [], week: [], later: [] };
+  followIds.forEach(id => {
+    const item = fBy[id];
+    if (todayIds.has(id)) { buckets.today.push(item); return; }
+    const labels = (item.badges || []).map(b => (b.label || '').toLowerCase());
+    if (labels.some(l => l === 'urgent' || l === 'today' || l === 'overdue' || l === 'p0')) buckets.today.push(item);
+    else if (labels.some(l => l === 'this week')) buckets.week.push(item);
+    else buckets.later.push(item);
+  });
+  const totalOpen = followIds.filter(i => !state.done[i]).length;
+  return (
+    <div className="pg-stack">
+      <section className="wk-banner">
+        <div>
+          <div className="wk-banner__range-eyebrow">Follow-ups</div>
+          <div className="wk-banner__range">{totalOpen} open</div>
+          <div className="wk-banner__range-sub">checks here sync to the vault on next sweep</div>
+        </div>
+        <div className="wk-banner__metrics">
+          <div className="m-metric m-metric--terracotta"><span className="m-metric__num">{buckets.today.length}</span><span className="m-metric__label">Today</span></div>
+          <div className="m-metric m-metric--mustard"><span className="m-metric__num">{buckets.week.length}</span><span className="m-metric__label">This week</span></div>
+          <div className="m-metric m-metric--sage"><span className="m-metric__num">{buckets.later.length}</span><span className="m-metric__label">Later</span></div>
+        </div>
+      </section>
+      <div style={{padding:'0 0 18px'}}>
+        <div className="pg-2col" style={{marginBottom:14}}>
+          <FollowupBucket
+            tone="urgent" label="Today"
+            items={buckets.today}
+            state={state} onCheck={cardProps.onCheck} onNote={cardProps.onNote}
+            openId={openFollow} setOpenId={setOpenFollow}
+          />
+          <FollowupBucket
+            tone="soon" label="This week"
+            items={buckets.week}
+            state={state} onCheck={cardProps.onCheck} onNote={cardProps.onNote}
+            openId={openFollow} setOpenId={setOpenFollow}
+          />
+        </div>
+        <FollowupBucket
+          tone="later" label="Later"
+          items={buckets.later}
+          state={state} onCheck={cardProps.onCheck} onNote={cardProps.onNote}
+          openId={openFollow} setOpenId={setOpenFollow}
+          collapsible defaultOpen={false}
+        />
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// Q2 PAGE (finalized — Mockup A, no operating beliefs)
+// ============================================================
+
+// Glance items: each has a label and a CTA list
+const GLANCE_ACTIONS = {
+  // Populated by /daily-dash refresh from Notion + Obsidian + Slack links per work-item label.
+  // Empty object renders "No links yet — add in Notion or Obsidian." for each glance item.
+};
+
+function GlanceItem({ label }) {
+  const [open, setOpen] = useS(false);
+  const actions = GLANCE_ACTIONS[label] || [];
+  return (
+    <>
+      <button className={`q2-glance__item ${open ? 'is-open' : ''}`} onClick={() => setOpen(o => !o)}>
+        {label}
+      </button>
+      {open && (
+        <div className="q2-glance__detail">
+          <div className="q2-glance__detail-actions">
+            {actions.length === 0
+              ? <span style={{fontSize:11, color:'var(--ink-muted)', fontStyle:'italic'}}>No links yet — add in Notion or Obsidian.</span>
+              : actions.map((a, i) => (
+                  <a key={i} className={`cta cta--${a.kind === 'slack' ? 'slack' : a.kind === 'notion' ? 'notion' : 'plum'}`} href={a.href}>
+                    {a.label} ↗
+                  </a>
+                ))}
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+function Q2WinRow({ win }) {
+  const [open, setOpen] = useS(false);
+  const links = (win.links && win.links.length > 0)
+    ? win.links
+    : (win.href ? [{ kind:'plum', label:'Open', href:win.href }] : []);
+  return (
+    <div className={`q2-winrow ${open ? 'is-open' : ''}`}>
+      <button className="q2-winrow__head" onClick={() => setOpen(!open)}>
+        <span className="q2-winrow__title">{win.title}</span>
+        <span className="q2-winrow__pod">{win.pod || 'N/A'}</span>
+        <span className="q2-winrow__date">{win.shipped_date || 'N/A'}</span>
+        <span className="q2-winrow__chev">{open ? '–' : '+'}</span>
+      </button>
+      {open && (
+        <div className="q2-winrow__detail">
+          <p className="q2-winrow__body">{win.body}</p>
+          {links.length > 0 && (
+            <div className="q2-winrow__actions">
+              {links.map((l, i) => {
+                const cls = l.kind === 'slack' ? 'slack' : l.kind === 'notion' ? 'notion' : 'plum';
+                const external = (l.href || '').startsWith('http');
+                return (
+                  <a key={i} className={`cta cta--${cls}`} href={l.href} target={external ? '_blank' : undefined} rel="noreferrer">{l.label} ↗</a>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Q2Page() {
+  const q = D.q2;
+  return (
+    <div className="pg-stack">
+      <section className="q2-northstar">
+        <div className="q2-northstar__eye">North star · Q2 2026</div>
+        <h1 className="q2-northstar__h">MPA — 3+ products per customer per month.</h1>
+        <p className="q2-northstar__body">{q.summary}</p>
+      </section>
+
+      <Block title="At a glance" sub={`${q.glance.reduce((n,c) => n + c.items.length, 0)} initiatives · click an item for links`} color="queue" count={q.glance.length}>
+        <div className="q2-glance">
+          {q.glance.map((c, i) => (
+            <div key={i} className={`q2-glance__col q2-glance__col--${c.tone}`}>
+              <div className="q2-glance__head">
+                <span className="q2-glance__label">{c.label}</span>
+                <span className="q2-glance__count">{c.items.length}</span>
+              </div>
+              <div className="q2-glance__items">
+                {c.items.map((it, j) => <GlanceItem key={j} label={it} />)}
+              </div>
+            </div>
+          ))}
+        </div>
+      </Block>
+
+      <Block title="What shipped this quarter" sub="click a row for body + CTA" color="schedule" count={q.wins.length}>
+        <div className="q2-wins q2-wins--rows">
+          <div className="q2-winrow q2-winrow--head">
+            <span className="q2-winrow__title">Title</span>
+            <span className="q2-winrow__pod">Pod</span>
+            <span className="q2-winrow__date">Shipped</span>
+            <span className="q2-winrow__chev" aria-hidden></span>
+          </div>
+          {q.wins.map((w, i) => <Q2WinRow key={i} win={w} />)}
+        </div>
+      </Block>
+    </div>
+  );
+}
+
+// ============================================================
+// PERSONAL PAGE (finalized — Mockup B)
+// ============================================================
+function PersonalPage({ state, cardProps }) {
+  const p = D.personal;
+  return (
+    <div className="pg-stack">
+      <section className="pp-hero">
+        <div className="pp-hero__eye">SendSight founding-advisor</div>
+        <div className="pp-hero__h">Formalizing the Scott engagement — proposal in flight.</div>
+        <div className="pp-hero__row">
+          <div className="pp-hero__row-label">Summary</div>
+          <div>{p.sendsight.summary}</div>
+        </div>
+        <div className="pp-hero__row">
+          <div className="pp-hero__row-label">Status</div>
+          <div>{p.sendsight.status}</div>
+        </div>
+        <div className="pp-hero__links">
+          {p.sendsight.links.map((l, i) => <a key={i} className={i === 0 ? 'cta cta--primary' : 'cta cta--plum'} href={l.href}>{l.label} ↗</a>)}
+        </div>
+      </section>
+
+      <div className="pg-2col">
+        <Block title="Next steps" color="schedule" count={p.sendsight_steps.length}>
+          <div>
+            {p.sendsight_steps.map(step => (
+              <div key={step.id} className={`pp-step ${state.done[step.id] ? 'is-done' : ''}`}>
+                <button type="button" className={`m-check ${state.done[step.id] ? 'is-done' : ''}`} onClick={() => cardProps.onCheck(step.id)}>
+                  {state.done[step.id] && <svg width="10" height="10" viewBox="0 0 11 11"><path d="M2 5.5L4.5 8L9 3" stroke="currentColor" strokeWidth="1.6" fill="none" strokeLinecap="round"/></svg>}
+                </button>
+                <div className="pp-step__when">{step.when}</div>
+                <div>
+                  <div className="pp-step__title">{step.title}</div>
+                  <div className="pp-step__sub">{step.sub}</div>
+                </div>
+                <div className="m-follow__badges">{(step.badges || []).map((b, i) => <Badge key={i} {...b} />)}</div>
+              </div>
+            ))}
+          </div>
+        </Block>
+        <div style={{display:'flex', flexDirection:'column', gap:14}}>
+          <Block title="Granola" sub="3-month plan" color="follow">
+            <div className="pp-mini">
+              <div className="pp-mini__h">{p.granola.title}</div>
+              <div className="pp-mini__meta">{p.granola.meta}</div>
+              <div className="pp-mini__body">{p.granola.body}</div>
+            </div>
+          </Block>
+          <Block title="Projects" color="board" count={p.projects.length}>
+            <div className="pp-projects">
+              {p.projects.map((pr, i) => (
+                <div key={i} className="pp-mini">
+                  <div className="pp-mini__h">{pr.h}</div>
+                  <div className="pp-mini__body">{pr.body}</div>
+                </div>
+              ))}
+            </div>
+          </Block>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// EXPORT
+// ============================================================
+Object.assign(window, {
+  WeekPage,
+  FollowupsPage,
+  Q2Page,
+  PersonalPage,
+});
+
+</script>
+
+<!-- ===== inlined: app.jsx (variant-state stripped) ===== -->
+<script type="text/babel">
+/* global React, ReactDOM, DAILY_DASH_DATA, TodayMockup1 */
+/* global TweaksPanel, TweakSection, TweakRadio, useTweaks */
+/* global WeekPage, Q2Page, PersonalPage */
+const { useState, useEffect, useCallback } = React;
+const D = window.DAILY_DASH_DATA;
+
+// ============================================================
+// PERSISTENCE
+// ============================================================
+const STORAGE_KEY = 'dear-me:state:v1';
+const loadState = () => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch { return {}; } };
+const saveState = (s) => { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch {} };
+
+function useStateStore() {
+  const [state, setState] = useState(() => {
+    const s = loadState();
+    return {
+      done: s.done || {},
+      dismissed: s.dismissed || {},
+      orders: s.orders || {},
+      boardMoves: s.boardMoves || {},
+      notes: s.notes || {},        // { [cardId]: "free-text note picked up on next /daily-dash refresh" }
+      notesTs: s.notesTs || {},    // { [cardId]: ISO timestamp of last edit }
+    };
+  });
+  useEffect(() => {
+    saveState(state);
+    // Sync to local dashboard server when served over http(s) — file:// usage just falls back to localStorage.
+    if (typeof window !== 'undefined'
+        && window.location && (window.location.protocol === 'http:' || window.location.protocol === 'https:')) {
+      try {
+        fetch('/state', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(state),
+          keepalive: true,
+        }).catch(() => { /* server not running — fine, localStorage is authoritative */ });
+      } catch (_) { /* noop */ }
+    }
+  }, [state]);
+  return [state, setState];
+}
+
+// ============================================================
+// HEADER — page tab routing
+// ============================================================
+const PAGES = [
+  { id: 'today',     label: 'Today' },
+  { id: 'week',      label: 'This Week' },
+  { id: 'followups', label: 'Follow-Ups' },
+  { id: 'q2',        label: 'Q2' },
+];
+
+function Header({ refreshedAt, activePage, onPage }) {
+  const [staleLabel, setStaleLabel] = useState('');
+  useEffect(() => {
+    const ref = new Date(refreshedAt);
+    const tick = () => {
+      const mins = Math.floor((new Date() - ref) / 60000);
+      let label;
+      if (mins < 1) label = 'just now';
+      else if (mins < 60) label = mins + 'm ago';
+      else if (mins < 1440) label = Math.floor(mins/60) + 'h ago';
+      else label = Math.floor(mins/1440) + 'd ago';
+      setStaleLabel(label);
+    };
+    tick();
+    const i = setInterval(tick, 30000);
+    return () => clearInterval(i);
+  }, [refreshedAt]);
+
+  return (
+    <header className="page-header">
+      <div className="page-header__brand">
+        <span className="brand-mark">∽</span>
+        <span className="brand-name">Dear Alex,</span>
+      </div>
+      <nav className="page-header__nav">
+        {PAGES.map(p => (
+          <button key={p.id}
+            className={`page-tab ${activePage === p.id ? 'is-active' : ''}`}
+            onClick={() => onPage(p.id)}>
+            {p.label}
+          </button>
+        ))}
+      </nav>
+      <div className="page-header__refresh">
+        <button
+          className="page-header__export"
+          title="Download your dashboard interactions as JSON — drop into state/ so /daily-dash picks them up on next refresh. Useful when serving via file:// instead of localhost."
+          onClick={() => {
+            try {
+              const raw = localStorage.getItem('dear-me:state:v1') || '{}';
+              const stamp = new Date().toISOString().replace(/[:.]/g,'-').slice(0,19);
+              const blob = new Blob([raw], { type: 'application/json' });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = `dear-me-interactions-${stamp}.json`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+            } catch (_) { /* noop */ }
+          }}>
+          Export
+        </button>
+        <span className="dot dot--live" />
+        <span>{staleLabel}</span>
+      </div>
+    </header>
+  );
+}
+
+// ============================================================
+// APP
+// ============================================================
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "palette": "parchment",
+  "type": "editorial",
+  "density": "standard"
+}/*EDITMODE-END*/;
+
+function App() {
+  const [t, setTweak] = window.useTweaks(TWEAK_DEFAULTS);
+  const [state, setState] = useStateStore();
+
+  // Page routing — persisted. Guard against stale page ids (e.g. retired 'personal').
+  const [activePage, setActivePage] = useState(() => {
+    try {
+      const p = localStorage.getItem('dear-me:page') || 'today';
+      return PAGES.some(x => x.id === p) ? p : 'today';
+    } catch { return 'today'; }
+  });
+  useEffect(() => { try { localStorage.setItem('dear-me:page', activePage); } catch {} }, [activePage]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.dataset.palette = t.palette;
+    root.dataset.type = t.type;
+    root.dataset.density = t.density;
+  }, [t.palette, t.type, t.density]);
+
+  const handleCheck = useCallback((id) => {
+    setState(s => ({ ...s, done: { ...s.done, [id]: !s.done[id] } }));
+  }, [setState]);
+  const handleDismiss = useCallback((id) => {
+    setState(s => ({ ...s, dismissed: { ...s.dismissed, [id]: true } }));
+  }, [setState]);
+  const handleReorder = useCallback((key) => (newOrder) => {
+    setState(s => ({ ...s, orders: { ...s.orders, [key]: newOrder } }));
+  }, [setState]);
+  // Per-card notes — toggleable textarea on any expanded card. Picked up on the next /daily-dash refresh.
+  const handleNote = useCallback((id, v) => {
+    setState(s => {
+      const nextNotes = { ...(s.notes || {}) };
+      const nextTs = { ...(s.notesTs || {}) };
+      if (v == null || v === '') {
+        delete nextNotes[id];
+        delete nextTs[id];
+      } else {
+        nextNotes[id] = v;
+        nextTs[id] = new Date().toISOString();
+      }
+      return { ...s, notes: nextNotes, notesTs: nextTs };
+    });
+  }, [setState]);
+
+  const cardProps = { onCheck: handleCheck, onDismiss: handleDismiss, onNote: handleNote, notes: state.notes };
+
+  const renderPage = () => {
+    switch (activePage) {
+      case 'today':
+        return <window.TodayMockup1 state={state} setState={setState} cardProps={cardProps} onReorder={handleReorder} />;
+      case 'week':
+        return <window.WeekPage state={state} cardProps={cardProps} />;
+      case 'q2':
+        return <window.Q2Page />;
+      case 'followups':
+        return <window.FollowupsPage state={state} cardProps={cardProps} />;
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="page">
+      <Header refreshedAt={D.meta.refreshedAt} activePage={activePage} onPage={setActivePage} />
+      <main>{renderPage()}</main>
+
+      <window.TweaksPanel title="Tweaks">
+        <window.TweakSection label="Palette">
+          <window.TweakRadio label="Mood" value={t.palette}
+            options={[
+              { value: 'parchment',  label: 'Parchment' },
+              { value: 'apricot',    label: 'Apricot' },
+              { value: 'persimmon',  label: 'Persimmon' },
+              { value: 'mossbutter', label: 'Moss & butter' },
+            ]}
+            onChange={(v) => setTweak('palette', v)} />
+        </window.TweakSection>
+        <window.TweakSection label="Density">
+          <window.TweakRadio label="Spacing" value={t.density}
+            options={[
+              { value: 'airy',     label: 'Airy' },
+              { value: 'standard', label: 'Standard' },
+              { value: 'compact',  label: 'Compact' },
+            ]}
+            onChange={(v) => setTweak('density', v)} />
+        </window.TweakSection>
+      </window.TweaksPanel>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+
+</script>
+
+</body>
+</html>
