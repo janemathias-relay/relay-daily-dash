@@ -686,7 +686,7 @@ window.DAILY_DASH_DATA = {
     { id:'cal-2', when:'10:30 AM', title:'Sam (1:1)', sub:'30 min · weekly', kind:'1on1',
       badges:[{ kind:'tone', label:'1:1' }],
       links:[{ kind:'doc', label:'Prep doc', href:'#' }] },
-    { id:'cal-3', when:'1:00 PM',  title:'Vendor sync — Iterable', sub:'45 min · 2 external attendees', kind:'external',
+    { id:'cal-3', when:'1:00 PM',  title:'Vendor sync — Acme CRM', sub:'45 min · 2 external attendees', kind:'external',
       badges:[{ kind:'tone', label:'external' }] },
     { id:'cal-4', when:'2:00 PM',  title:'Growth pod weekly', sub:'60 min · 6 attendees', kind:'team',
       badges:[{ kind:'tone', label:'team' }],
@@ -718,7 +718,7 @@ window.DAILY_DASH_DATA = {
   ],
 
   overdue: [
-    { id:'od-1', when:'2 days late', title:'Approve vendor SOW — Iterable renewal',
+    { id:'od-1', when:'2 days late', title:'Approve vendor SOW — Acme CRM renewal',
       sub:'Procurement chased twice. Cannot proceed without your sign-off.',
       badges:[{ kind:'pri', label:'P0' }],
       links:[{ kind:'doc', label:'SOW', href:'#' }] },
@@ -766,7 +766,7 @@ window.DAILY_DASH_DATA = {
       links:[{ kind:'slack', label:'Sam thread', href:'#' }] },
     { id:'fu-acme-2', when:'Mon May 25', title:'Loop back with Jamie on retention deck',
       sub:'After leadership review.' },
-    { id:'fu-acme-3', when:'Today', title:'Confirm Iterable renewal SOW',
+    { id:'fu-acme-3', when:'Today', title:'Confirm Acme CRM renewal SOW',
       sub:'Procurement is waiting.' },
   ],
 
@@ -3406,8 +3406,7 @@ function Q2Page() {
     <div className="pg-stack">
       <section className="q2-northstar">
         <div className="q2-northstar__eye">North star · Q2 2026</div>
-        <h1 className="q2-northstar__h">MPA — 3+ products per customer per month.</h1>
-        <p className="q2-northstar__body">{q.summary}</p>
+        <h1 className="q2-northstar__h">Activation rate — 60% of new orgs in 14 days.</h1>
       </section>
 
       <Block title="At a glance" sub={`${q.glance.reduce((n,c) => n + c.items.length, 0)} initiatives · click an item for links`} color="queue" count={q.glance.length}>

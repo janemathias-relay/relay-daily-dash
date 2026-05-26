@@ -3278,8 +3278,7 @@ function Q2Page() {
     <div className="pg-stack">
       <section className="q2-northstar">
         <div className="q2-northstar__eye">North star · Q2 2026</div>
-        <h1 className="q2-northstar__h">MPA — 3+ products per customer per month.</h1>
-        <p className="q2-northstar__body">{q.summary}</p>
+        <h1 className="q2-northstar__h">{q.summary}</h1>
       </section>
 
       <Block title="At a glance" sub={`${q.glance.reduce((n,c) => n + c.items.length, 0)} initiatives · click an item for links`} color="queue" count={q.glance.length}>
